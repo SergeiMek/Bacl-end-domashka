@@ -39,7 +39,16 @@ exports.app.post('/videos', (req, res) => {
         errorsMessages: []
     };
     let { title, author, availableResolutions } = req.body;
+    if (title === null) {
+        title = '';
+    }
     if (!title || title.trim().length < 1 || title.trim().length > 40) {
+        errors.errorsMessages.push({ message: "Invalid Title", field: "title" });
+    }
+    /* if (typeof title === null) {
+         errors.errorsMessages.push({message: "Invalid Title", field: "title"})
+     }*/
+    if (!title) {
         errors.errorsMessages.push({ message: "Invalid Title", field: "title" });
     }
     if (!author || title.trim().length < 1 || title.trim().length > 20) {
@@ -81,6 +90,7 @@ exports.app.put('/videos/:id', (req, res) => {
     let errors = {
         errorsMessages: []
     };
+    //let {title, author, availableResolutions} = req.body
     let { title, author, availableResolutions, canBeDownloaded, publicationDate, minAgeRestriction } = req.body;
     if (!title || title.trim().length < 1 || title.trim().length > 40) {
         errors.errorsMessages.push({ message: "Invalid Title", field: "title" });

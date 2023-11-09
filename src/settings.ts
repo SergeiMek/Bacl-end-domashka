@@ -5,6 +5,7 @@ export const app = express()
 
 app.use(express.json())
 
+
 const AvailableResolutions: string[] = ['P144', 'P240', 'P360', 'P480', 'P720', 'P1080', 'P1440', 'P2160']
 
 type RequestWithParams<P> = Request<P, {}, {}, {}>
@@ -84,8 +85,19 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     }
 
     let {title, author, availableResolutions} = req.body
+    if (title === null) {
+        title = ''
+    }
 
     if (!title || title.trim().length < 1 || title.trim().length > 40) {
+        errors.errorsMessages.push({message: "Invalid Title", field: "title"})
+    }
+
+    /* if (typeof title === null) {
+         errors.errorsMessages.push({message: "Invalid Title", field: "title"})
+     }*/
+
+    if (!title) {
         errors.errorsMessages.push({message: "Invalid Title", field: "title"})
     }
     if (!author || title.trim().length < 1 || title.trim().length > 20) {
@@ -124,7 +136,6 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     }
     videos.push(newVideo)
     res.status(201).send(newVideo)
-
 })
 
 app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVideoDta>, res: Response,) => {
@@ -133,6 +144,7 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
         errorsMessages: []
     }
 
+    //let {title, author, availableResolutions} = req.body
     let {title, author, availableResolutions, canBeDownloaded, publicationDate, minAgeRestriction} = req.body
 
     if (!title || title.trim().length < 1 || title.trim().length > 40) {
