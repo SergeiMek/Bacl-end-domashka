@@ -87,6 +87,7 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     let {title, author, availableResolutions} = req.body
     if (title === null) {
         title = ''
+        errors.errorsMessages.push({message: "Invalid Title", field: "title"})
     }
 
     if (!title || title.trim().length < 1 || title.trim().length > 40) {
@@ -148,6 +149,7 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
     let {title, author, availableResolutions, canBeDownloaded, publicationDate, minAgeRestriction} = req.body
     if (title === null) {
         title = ''
+        errors.errorsMessages.push({message: "Invalid Title", field: "title"})
     }
 
     if (!title || title.trim().length < 1 || title.trim().length > 40) {
