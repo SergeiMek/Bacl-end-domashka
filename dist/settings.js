@@ -41,8 +41,9 @@ exports.app.post('/videos', (req, res) => {
     let { title, author, availableResolutions } = req.body;
     if (title === null) {
         title = '';
+        errors.errorsMessages.push({ message: "Invalid Title", field: "title" });
     }
-    if (!title || title.trim().length < 1 || title.trim().length > 40) {
+    if (!title || !title.trim() || title.trim().length > 40) {
         errors.errorsMessages.push({ message: "Invalid Title", field: "title" });
     }
     /* if (typeof title === null) {
@@ -51,7 +52,7 @@ exports.app.post('/videos', (req, res) => {
     if (!title) {
         errors.errorsMessages.push({ message: "Invalid Title", field: "title" });
     }
-    if (!author || title.trim().length < 1 || title.trim().length > 20) {
+    if (!author || !title.trim() || title.trim().length > 20) {
         errors.errorsMessages.push({ message: "Invalid author", field: "author" });
     }
     if (Array.isArray(AvailableResolutions)) {
@@ -66,7 +67,7 @@ exports.app.post('/videos', (req, res) => {
         availableResolutions = [];
     }
     if (errors.errorsMessages.length) {
-        res.sendStatus(400).send(errors);
+        res.status(400).send(errors);
         return;
     }
     const createdAt = new Date();
@@ -94,11 +95,12 @@ exports.app.put('/videos/:id', (req, res) => {
     let { title, author, availableResolutions, canBeDownloaded, publicationDate, minAgeRestriction } = req.body;
     if (title === null) {
         title = '';
-    }
-    if (!title || title.trim().length < 1 || title.trim().length > 40) {
         errors.errorsMessages.push({ message: "Invalid Title", field: "title" });
     }
-    if (!author || title.trim().length < 1 || title.trim().length > 20) {
+    if (!title || !title.trim() || title.trim().length > 40) {
+        errors.errorsMessages.push({ message: "Invalid Title", field: "title" });
+    }
+    if (!author || !title.trim() || title.trim().length > 20) {
         errors.errorsMessages.push({ message: "Invalid author", field: "author" });
     }
     if (Array.isArray(AvailableResolutions)) {
@@ -125,7 +127,7 @@ exports.app.put('/videos/:id', (req, res) => {
         minAgeRestriction = null;
     }
     if (errors.errorsMessages.length) {
-        res.sendStatus(400).send(errors);
+        res.status(400).send(errors);
         return;
     }
     const videoIndex = videos.findIndex(v => v.id === id);
