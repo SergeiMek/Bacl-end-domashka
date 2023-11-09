@@ -92,6 +92,9 @@ exports.app.put('/videos/:id', (req, res) => {
     };
     //let {title, author, availableResolutions} = req.body
     let { title, author, availableResolutions, canBeDownloaded, publicationDate, minAgeRestriction } = req.body;
+    if (title === null) {
+        title = '';
+    }
     if (!title || title.trim().length < 1 || title.trim().length > 40) {
         errors.errorsMessages.push({ message: "Invalid Title", field: "title" });
     }
