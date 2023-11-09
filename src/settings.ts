@@ -116,7 +116,7 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     }
 
     if (errors.errorsMessages.length) {
-        res.status(400).send(errors)
+        res.status(400).send(errors.errorsMessages)
         return
     }
     const createdAt = new Date()
@@ -144,7 +144,6 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
         errorsMessages: []
     }
 
-    //let {title, author, availableResolutions} = req.body
     let {title, author, availableResolutions, canBeDownloaded, publicationDate, minAgeRestriction} = req.body
     if (title === null) {
         title = ''
@@ -180,7 +179,7 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
         minAgeRestriction = null
     }
     if (errors.errorsMessages.length) {
-        res.status(400).send(errors)
+        res.status(400).send(errors.errorsMessages)
         return
     }
     const videoIndex = videos.findIndex(v => v.id === id)
