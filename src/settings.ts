@@ -85,22 +85,14 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     }
 
     let {title, author, availableResolutions} = req.body
-    if (title === null) {
-        title = ''
-    }
+
 
     if (!title || !title.trim() || title.trim().length > 40) {
         errors.errorsMessages.push({message: "Invalid Title", field: "title"})
     }
 
-    /* if (typeof title === null) {
-         errors.errorsMessages.push({message: "Invalid Title", field: "title"})
-     }*/
 
-    if (!title) {
-        errors.errorsMessages.push({message: "Invalid Title", field: "title"})
-    }
-    if (!author || !title.trim() || title.trim().length > 20) {
+    if (!author || !author.trim() || author.trim().length > 20) {
         errors.errorsMessages.push({message: "Invalid author", field: "author"})
     }
 
@@ -114,7 +106,7 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     } else {
         availableResolutions = []
     }
-
+    debugger
     if (errors.errorsMessages.length) {
         res.status(400).send(errors)
         return
@@ -145,14 +137,12 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
     }
 
     let {title, author, availableResolutions, canBeDownloaded, publicationDate, minAgeRestriction} = req.body
-    if (title === null) {
-        title = ''
-    }
+
 
     if (!title || !title.trim() || title.trim().length > 40) {
         errors.errorsMessages.push({message: "Invalid Title", field: "title"})
     }
-    if (!author || !title.trim() || title.trim().length > 20) {
+    if (!author || !author.trim() || author.trim().length > 20) {
         errors.errorsMessages.push({message: "Invalid author", field: "author"})
     }
 
