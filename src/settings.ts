@@ -59,7 +59,9 @@ app.get('/videos', (req: Request, res: Response) => {
     res.send(videos)
 })
 
-app.get('/videos/:id', (req: RequestWithParams<{ id: string }>, res: Response) => {
+app.get('/videos/:id', (req: RequestWithParams<{
+    id: string
+}>, res: Response) => {
     const id: number = +req.params.id
 
     const video = videos.find((v) => v.id === id)
@@ -130,7 +132,9 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     res.status(201).send(newVideo)
 })
 
-app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVideoDta>, res: Response,) => {
+app.put('/videos/:id', (req: RequestWithBodyAndParams<{
+    id: string
+}, UpdateVideoDta>, res: Response,) => {
     const id: number = +req.params.id
     let errors: errorType = {
         errorsMessages: []
@@ -160,6 +164,11 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
     if (typeof canBeDownloaded === "undefined") {
         canBeDownloaded = false
     }
+    if (typeof canBeDownloaded !== "boolean") {
+        errors.errorsMessages.push({message: "Invalid  canBeDownloaded", field: "canBeDownloaded"})
+    }
+
+
     if (typeof minAgeRestriction !== 'undefined' && typeof minAgeRestriction === 'number') {
         minAgeRestriction < 1 || minAgeRestriction > 18 && errors.errorsMessages.push({
             message: "Invalid minAgeRestriction",
@@ -192,7 +201,9 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
     res.sendStatus(204)
 })
 
-app.delete('/videos/:id', (req: RequestWithParams<{ id: string }>, res) => {
+app.delete('/videos/:id', (req: RequestWithParams<{
+    id: string
+}>, res) => {
     for (let i = 0; i < videos.length; i++) {
         if (videos[i].id === +req.params.id) {
             videos.splice(i, 1);
