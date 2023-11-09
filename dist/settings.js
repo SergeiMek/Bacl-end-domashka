@@ -66,7 +66,7 @@ exports.app.post('/videos', (req, res) => {
         availableResolutions = [];
     }
     if (errors.errorsMessages.length) {
-        res.status(400).send({ errors });
+        res.status(400).send(errors);
         return;
     }
     const createdAt = new Date();
@@ -125,7 +125,7 @@ exports.app.put('/videos/:id', (req, res) => {
         minAgeRestriction = null;
     }
     if (errors.errorsMessages.length) {
-        res.status(400).send({ errors });
+        res.status(400).send(errors);
         return;
     }
     const videoIndex = videos.findIndex(v => v.id === id);

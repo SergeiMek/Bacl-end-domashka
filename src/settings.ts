@@ -116,7 +116,7 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     }
 
     if (errors.errorsMessages.length) {
-        res.status(400).send({errors})
+        res.status(400).send(errors)
         return
     }
     const createdAt = new Date()
@@ -180,7 +180,7 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
         minAgeRestriction = null
     }
     if (errors.errorsMessages.length) {
-        res.status(400).send({errors})
+        res.status(400).send(errors)
         return
     }
     const videoIndex = videos.findIndex(v => v.id === id)
