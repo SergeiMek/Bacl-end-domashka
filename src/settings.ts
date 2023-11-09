@@ -167,7 +167,9 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{
     if (typeof canBeDownloaded !== "boolean") {
         errors.errorsMessages.push({message: "Invalid  canBeDownloaded", field: "canBeDownloaded"})
     }
-
+    if (typeof publicationDate !== "string") {
+        errors.errorsMessages.push({message: "Invalid  publicationDate", field: "publicationDate"})
+    }
 
 
     if (typeof minAgeRestriction !== 'undefined' && typeof minAgeRestriction === 'number') {
@@ -198,6 +200,7 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{
         publicationDate: publicationDate ? publicationDate : video.publicationDate
 
     }
+    debugger
     videos.splice(videoIndex, 1, updateItem)
     res.sendStatus(204)
 })
