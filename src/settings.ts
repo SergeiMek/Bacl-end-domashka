@@ -39,7 +39,7 @@ type VideoType = {
     availableResolutions: typeof AvailableResolutions
 }
 
-const videos: Array<VideoType> = [
+export const videos: Array<VideoType> = [
     {
         id: 1,
         title: "string",
@@ -98,7 +98,8 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
         errors.errorsMessages.push({message: "Invalid author", field: "author"})
     }
 
-    if (Array.isArray(AvailableResolutions)) {
+
+    if (Array.isArray(availableResolutions)) {
         availableResolutions.map((m) => {
             !AvailableResolutions.includes(m) && errors.errorsMessages.push({
                 message: "Invalid availableResolutions",
@@ -108,7 +109,8 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     } else {
         availableResolutions = []
     }
-    debugger
+
+
     if (errors.errorsMessages.length) {
         res.status(400).send(errors)
         return
@@ -132,9 +134,7 @@ app.post('/videos', (req: RequestWithBody<BodyPost>, res: Response) => {
     res.status(201).send(newVideo)
 })
 
-app.put('/videos/:id', (req: RequestWithBodyAndParams<{
-    id: string
-}, UpdateVideoDta>, res: Response,) => {
+app.put('/videos/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVideoDta>, res: Response,) => {
     const id: number = +req.params.id
     let errors: errorType = {
         errorsMessages: []
@@ -200,7 +200,7 @@ app.put('/videos/:id', (req: RequestWithBodyAndParams<{
         publicationDate: publicationDate ? publicationDate : video.publicationDate
 
     }
-    debugger
+
     videos.splice(videoIndex, 1, updateItem)
     res.sendStatus(204)
 })
