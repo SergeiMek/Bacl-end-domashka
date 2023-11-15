@@ -11,9 +11,12 @@ export const app = express()
 app.use(express.json())
 app.delete('/testing/all-data', (req: Request, res: Response) => {
     db.videos.splice(0, db.videos.length)
+    db.posts.splice(0, db.videos.length)
+    db.blogs.splice(0, db.videos.length)
     res.sendStatus(204)
 })
-debugger
+
+
 app.use('/videos', videoRoute)
 app.use('/blogs', blogRoute)
 app.use('/posts', postsRoute)

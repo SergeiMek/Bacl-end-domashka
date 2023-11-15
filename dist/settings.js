@@ -13,9 +13,10 @@ exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
 exports.app.delete('/testing/all-data', (req, res) => {
     db_1.db.videos.splice(0, db_1.db.videos.length);
+    db_1.db.posts.splice(0, db_1.db.videos.length);
+    db_1.db.blogs.splice(0, db_1.db.videos.length);
     res.sendStatus(204);
 });
-debugger;
 exports.app.use('/videos', video_route_1.videoRoute);
 exports.app.use('/blogs', blog_route_1.blogRoute);
 exports.app.use('/posts', posts_route_1.postsRoute);
