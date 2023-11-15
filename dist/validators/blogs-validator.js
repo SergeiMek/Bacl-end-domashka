@@ -7,5 +7,5 @@ const nameValidation = (0, express_validator_1.body)('name').isString().trim().i
 const descriptionValidation = (0, express_validator_1.body)('description').isString().trim().isLength({ min: 1, max: 500 }).withMessage('Incorrect description!');
 const websiteUrlValidation = (0, express_validator_1.body)('websiteUrl').isString().trim().isLength({ min: 1, max: 100 })
     .matches('^https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$').withMessage('Incorrect websiteUrl!');
-const blogPostValidation = () => [nameValidation, descriptionValidation, websiteUrlValidation, input_model_validation_1.inputModelValidation];
+const blogPostValidation = () => [websiteUrlValidation, descriptionValidation, nameValidation, input_model_validation_1.inputModelValidation];
 exports.blogPostValidation = blogPostValidation;
