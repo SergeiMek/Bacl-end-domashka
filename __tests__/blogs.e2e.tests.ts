@@ -1,5 +1,5 @@
 import request from 'supertest'
-import {app, videos} from "../src/settings";
+import {app} from "../src/settings";
 
 
 describe('/videos', () => {
