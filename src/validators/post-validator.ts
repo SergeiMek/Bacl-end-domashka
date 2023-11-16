@@ -4,10 +4,11 @@ import {inputModelValidation} from "../middlewares/inputModel/input-model-valida
 
 const blogIdValidation = body('blogId').isString().trim().custom((value) => {
     const blog = BlogRepository.getBlogById(value)
-
+debugger
     if (!blog) {
         throw new Error("Incorrect blogId")
     }
+    return true
 }).withMessage("Incorrect blogId")
 
 const titleValidation = body('title').isString().trim().isLength({min: 1, max: 30}).withMessage('Incorrect title!')
