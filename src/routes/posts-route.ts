@@ -52,7 +52,7 @@ postsRoute.put('/:id', authMiddleware, postValidation(), (req: RequestWithBodyAn
 
 })
 
-postsRoute.delete('/:id', authMiddleware, postValidation(), (req: RequestWithParams<paramsPost>, res: Response) => {
+postsRoute.delete('/:id', authMiddleware,  (req: RequestWithParams<paramsPost>, res: Response) => {
     const id = req.params.id
     const deleted = PostRepository.deletePost(id)
     if (deleted) {
