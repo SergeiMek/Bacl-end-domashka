@@ -49,6 +49,7 @@ videoRoute.post('/', async (req: RequestWithBody<BodyPost>, res: Response) => {
     }
 
 
+
     if (Array.isArray(availableResolutions)) {
         availableResolutions.map((m) => {
             !AvailableResolutions.includes(m) && errors.errorsMessages.push({
