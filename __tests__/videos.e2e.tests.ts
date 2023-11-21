@@ -2,29 +2,28 @@ import request from 'supertest'
 import {app} from "../src/settings";
 
 
-
-describe('/blogs', () => {
+describe('/videos', () => {
 
     beforeAll(async () => {
         await request(app).delete('/testing/all-data')
     })
 
     it('should return 200 and empty array', async () => {
-        await request(app).get('/blogs')
+        await request(app).get('/videos')
             .expect(200, [])
     });
     it('should return 404 for not existing course', async () => {
-        await request(app).get('/blogs/999999999')
+        await request(app).get('/videos/999999999')
             .expect(404)
     });
     it(`should'nt create course with incorrect title`, async () => {
 
         await request(app)
-            .post('/blogs')
+            .post('/videos')
             .send({title: null, author: 'author', availableResolutions: ['P144']})
             .expect(400)
 
-        await request(app).get('/blogs')
+        await request(app).get('/videos')
             .expect(200, [])
 
     });
@@ -32,11 +31,11 @@ describe('/blogs', () => {
     it(`should'nt create course with incorrect author`, async () => {
 
         await request(app)
-            .post('/blogs')
+            .post('/videos')
             .send({title: 'title', author: null, availableResolutions: ['P144']})
             .expect(400)
 
-        await request(app).get('/blogs')
+        await request(app).get('/videos')
             .expect(200, [])
 
     });
@@ -44,7 +43,7 @@ describe('/blogs', () => {
     it(`length title is not correct`, async () => {
 
         await request(app)
-            .post('/blogs')
+            .post('/videos')
             .send({
                 title: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
                 author: 'author',
@@ -52,7 +51,7 @@ describe('/blogs', () => {
             })
             .expect(400)
 
-        await request(app).get('/blogs')
+        await request(app).get('/videos')
             .expect(200, [])
 
     });
@@ -60,11 +59,11 @@ describe('/blogs', () => {
     it(`length title is not correct`, async () => {
 
         await request(app)
-            .post('/blogs')
+            .post('/videos')
             .send({title: 'title', author: 'aaaaaaaaaaaaaaaaaaaaa', availableResolutions: ['P144']})
             .expect(400)
 
-        await request(app).get('/blogs')
+        await request(app).get('/videos')
             .expect(200, [])
 
     });
@@ -74,13 +73,13 @@ describe('/blogs', () => {
     it(`should'nt create course with incorrect availableResolutions`, async () => {
 
         const createResponse = await request(app)
-            .post('/blogs')
+            .post('/videos')
             .send({title: 'title', author: 'author', availableResolutions: null})
             .expect(201)
 
         createdBlogs = createResponse.body
 
-        await request(app).get('/blogs')
+        await request(app).get('/videos')
             .expect(200)
 
         expect(createdBlogs).toEqual({
@@ -98,7 +97,7 @@ describe('/blogs', () => {
 
     it(`should'nt update with incorrect input data`, async () => {
         await request(app)
-            .put('/blogs/' + createdBlogs.id)
+            .put('/videos/' + createdBlogs.id)
             .send({
                 ...createdBlogs,
                 title: ''
@@ -106,14 +105,14 @@ describe('/blogs', () => {
             .expect(400)
 
         await request(app)
-            .get('/blogs/' + createdBlogs.id)
+            .get('/videos/' + createdBlogs.id)
             .expect(200, createdBlogs)
     });
 
 
     it(`should'nt update course that not exist`, async () => {
         await request(app)
-            .put('/blogs/' + 2)
+            .put('/videos/' + 2)
             .send({
                 ...createdBlogs,
                 title: 'sergei'
@@ -124,7 +123,7 @@ describe('/blogs', () => {
     it(`should update course with  correct input data`, async () => {
 
         await request(app)
-            .put('/blogs/' + createdBlogs.id)
+            .put('/videos/' + createdBlogs.id)
             .send({
                 ...createdBlogs,
                 title: 'yea',
@@ -135,15 +134,15 @@ describe('/blogs', () => {
     it(`should delete both courses`, async () => {
 
         await request(app)
-            .delete('/blogs/' + createdBlogs.id)
+            .delete('/videos/' + createdBlogs.id)
             .expect(204)
 
         await request(app)
-            .get('/blogs/' + createdBlogs.id)
+            .get('/videos/' + createdBlogs.id)
             .expect(404)
 
         await request(app)
-            .get('/blogs')
+            .get('/videos')
             .expect(200, [])
     })
 

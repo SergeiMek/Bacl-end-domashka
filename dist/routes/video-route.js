@@ -1,14 +1,25 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.videoRoute = void 0;
 const express_1 = require("express");
 const output_1 = require("../types/video/output");
 const db_1 = require("../db/db");
 exports.videoRoute = (0, express_1.Router)({});
-const videos = db_1.db.videos;
-exports.videoRoute.get('/', (req, res) => {
-    res.send(videos);
-});
+//const videos = db.videos
+exports.videoRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //res.send(videos)
+    const products = yield db_1.videoCollection.find({}).toArray();
+    res.send(products);
+}));
 exports.videoRoute.get('/:id', (req, res) => {
     const id = +req.params.id;
     const video = videos.find((v) => v.id === id);
@@ -18,7 +29,7 @@ exports.videoRoute.get('/:id', (req, res) => {
     }
     res.send(video);
 });
-exports.videoRoute.post('/', (req, res) => {
+exports.videoRoute.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let errors = {
         errorsMessages: []
     };
@@ -57,9 +68,11 @@ exports.videoRoute.post('/', (req, res) => {
         publicationDate: publicationDate.toISOString(),
         availableResolutions: availableResolutions
     };
-    videos.push(newVideo);
+    /* videos.push(newVideo)
+     res.status(201).send(newVideo)*/
+    const result = yield db_1.videoCollection.insertOne(newVideo);
     res.status(201).send(newVideo);
-});
+}));
 exports.videoRoute.put('/:id', (req, res) => {
     const id = +req.params.id;
     let errors = {

@@ -8,15 +8,14 @@ const express_1 = __importDefault(require("express"));
 const video_route_1 = require("./routes/video-route");
 const blog_route_1 = require("./routes/blog-route");
 const posts_route_1 = require("./routes/posts-route");
-const db_1 = require("./db/db");
 exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
-exports.app.delete('/testing/all-data', (req, res) => {
-    db_1.db.videos.splice(0, db_1.db.videos.length);
-    db_1.db.posts.splice(0, db_1.db.videos.length);
-    db_1.db.blogs.splice(0, db_1.db.videos.length);
-    res.sendStatus(204);
-});
+/*app.delete('/testing/all-data', (req: Request, res: Response) => {
+    db.videos.splice(0, db.videos.length)
+    db.posts.splice(0, db.posts.length)
+    db.blogs.splice(0, db.blogs.length)
+    res.sendStatus(204)
+})*/
 exports.app.use('/videos', video_route_1.videoRoute);
 exports.app.use('/blogs', blog_route_1.blogRoute);
 exports.app.use('/posts', posts_route_1.postsRoute);

@@ -3,14 +3,16 @@ import {errorType, RequestWithBody, RequestWithBodyAndParams, RequestWithParams}
 import {BodyPost} from "../types/video/input";
 import {AvailableResolutions} from "../types/video/output";
 import {UpdateVideoDta} from "../types/video/input";
-import {db} from "../db/db";
+import {videoCollection} from "../db/db";
 
 export const videoRoute = Router({})
 
-const videos = db.videos
+//const videos = db.videos
 
-videoRoute.get('/', (req: Request, res: Response) => {
-    res.send(videos)
+videoRoute.get('/', async (req: Request, res: Response) => {
+    //res.send(videos)
+    const products = await videoCollection.find({}).toArray()
+    res.send(products)
 })
 
 videoRoute.get('/:id', (req: RequestWithParams<{
@@ -29,7 +31,7 @@ videoRoute.get('/:id', (req: RequestWithParams<{
 })
 
 
-videoRoute.post('/', (req: RequestWithBody<BodyPost>, res: Response) => {
+videoRoute.post('/', async (req: RequestWithBody<BodyPost>, res: Response) => {
     let errors: errorType = {
         errorsMessages: []
     }
@@ -78,7 +80,9 @@ videoRoute.post('/', (req: RequestWithBody<BodyPost>, res: Response) => {
         publicationDate: publicationDate.toISOString(),
         availableResolutions: availableResolutions
     }
-    videos.push(newVideo)
+   /* videos.push(newVideo)
+    res.status(201).send(newVideo)*/
+    const result = await videoCollection.insertOne(newVideo)
     res.status(201).send(newVideo)
 })
 

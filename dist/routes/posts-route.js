@@ -40,7 +40,7 @@ exports.postsRoute.put('/:id', auth_middleware_1.authMiddleware, (0, post_valida
         res.send(404);
     }
 });
-exports.postsRoute.delete('/:id', auth_middleware_1.authMiddleware, (0, post_validator_1.postValidation)(), (req, res) => {
+exports.postsRoute.delete('/:id', auth_middleware_1.authMiddleware, (req, res) => {
     const id = req.params.id;
     const deleted = posts_repository_1.PostRepository.deletePost(id);
     if (deleted) {
