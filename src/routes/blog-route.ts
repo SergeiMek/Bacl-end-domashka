@@ -33,6 +33,7 @@ blogsRoute.post('/', authMiddleware, blogPostValidation(), async (req: RequestWi
 
     const result = await BlogRepository.createBlog(newProduct)
 
+
     return res.status(201).send(result)
 })
 

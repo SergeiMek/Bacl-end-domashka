@@ -30,7 +30,14 @@ export class BlogRepository {
             isMembership: false
         }
         const result = await blogsCollection.insertOne(newBlog)
-        return newBlog
+        return {
+            id: newBlog.id,
+            name: newBlog.name,
+            description: newBlog.description,
+            websiteUrl: newBlog.websiteUrl,
+            createdAt: newBlog.createdAt,
+            isMembership: false
+        }
     }
 
     static async updateBlog(id: string, blogBody: BlogsBodyType): Promise<boolean> {
