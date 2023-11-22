@@ -7,13 +7,13 @@ import {MongoClient} from "mongodb";
 
 
 dotenv.config()
-const mongoUri = process.env.MONGO_URL
-
-if(!mongoUri){
+const mongoURI = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'
+//const mongoURI = process.env.MONGO_URL
+if(!mongoURI){
     throw new Error('! URL doesnt found')
 }
 
-export const client = new MongoClient(mongoUri)
+export const client = new MongoClient(mongoURI)
 const db =  client.db("blogs")
 
 export const videosCollection =db.collection<VideoType>("videos")

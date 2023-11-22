@@ -16,11 +16,12 @@ exports.runDb = exports.postsCollection = exports.blogsCollection = exports.vide
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongodb_1 = require("mongodb");
 dotenv_1.default.config();
-const mongoUri = process.env.MONGO_URL;
-if (!mongoUri) {
+const mongoURI = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017';
+//const mongoURI = process.env.MONGO_URL
+if (!mongoURI) {
     throw new Error('! URL doesnt found');
 }
-exports.client = new mongodb_1.MongoClient(mongoUri);
+exports.client = new mongodb_1.MongoClient(mongoURI);
 const db = exports.client.db("blogs");
 exports.videosCollection = db.collection("videos");
 exports.blogsCollection = db.collection("blogs");
