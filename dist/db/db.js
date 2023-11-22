@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.runDb = exports.postsCollection = exports.blogsCollection = exports.videosCollection = exports.client = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongodb_1 = require("mongodb");
+////MONGO_URL= 'mongodb+srv://serakss19:k65XFMoqDpLc2YXz@express-project.21dn67g.mongodb.net/?retryWrites=true&w=majority'
 dotenv_1.default.config();
 const mongoURI = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017';
 //const mongoURI = process.env.MONGO_URL

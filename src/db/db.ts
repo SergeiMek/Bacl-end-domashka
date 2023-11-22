@@ -5,9 +5,10 @@ import dotenv from 'dotenv'
 import {MongoClient} from "mongodb";
 
 
-
+////MONGO_URL= 'mongodb+srv://serakss19:k65XFMoqDpLc2YXz@express-project.21dn67g.mongodb.net/?retryWrites=true&w=majority'
 dotenv.config()
 const mongoURI = process.env.MONGO_URL || 'mongodb://0.0.0.0:27017'
+
 //const mongoURI = process.env.MONGO_URL
 if(!mongoURI){
     throw new Error('! URL doesnt found')
