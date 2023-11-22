@@ -18,7 +18,7 @@ blogsRoute.get('/:id', async (req: RequestWithParams<BlogsParams>, res: Response
     const blog = await BlogRepository.getBlogById(req.params.id)
     if (!blog) {
         res.sendStatus(404)
-
+        return
     }
     return res.send(blog)
 })
@@ -58,9 +58,9 @@ blogsRoute.put('/:id', authMiddleware, blogPostValidation(), async (req: Request
 
 blogsRoute.delete('/:id', authMiddleware, async (req: RequestWithParams<BlogsParams>, res: Response) => {
     const id = req.params.id
-    const deleted =await BlogRepository.deleteBlog(id)
+    const deleted = await BlogRepository.deleteBlog(id)
     if (deleted) {
-      return   res.send(204)
+        return res.send(204)
     }
-   return  res.send(404)
+    return res.send(404)
 })
