@@ -4,7 +4,7 @@ import {inputModelValidation} from "../middlewares/inputModel/input-model-valida
 
 const blogIdValidation = body('blogId').isString().trim().custom((value) => {
     const blog = BlogRepository.getBlogById(value)
-debugger
+
     if (!blog) {
         throw new Error("Incorrect blogId")
     }

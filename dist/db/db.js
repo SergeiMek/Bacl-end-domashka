@@ -12,48 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runDb = exports.videoCollection = exports.client = void 0;
+exports.runDb = exports.postsCollection = exports.blogsCollection = exports.videosCollection = exports.client = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongodb_1 = require("mongodb");
-/*
-type dbType = {
-    videos: Array<VideoType>
-    blogs: Array<blogsType>
-    posts: Array<postsType>
-}
-
-
-export const db: dbType = {
-    videos: [
-        {
-            id: 1,
-            title: "string",
-            author: "string",
-            canBeDownloaded: true,
-            minAgeRestriction: null,
-            createdAt: "2023-11-08T13:08:16.611Z",
-            publicationDate: "2023-11-08T13:08:16.611Z",
-            availableResolutions: [
-                "P144"
-            ]
-        },
-    ],
-    blogs: [{
-        id: "1",
-        name: "string",
-        description: "string",
-        websiteUrl: "string"
-    }],
-    posts: [{
-        id: "1",
-        title: "string",
-        shortDescription: "string",
-        content: "string",
-        blogId: "1",
-        blogName: "4"
-
-    }]
-}*/
 dotenv_1.default.config();
 const mongoUri = process.env.MONGO_URL;
 if (!mongoUri) {
@@ -61,7 +22,9 @@ if (!mongoUri) {
 }
 exports.client = new mongodb_1.MongoClient(mongoUri);
 const db = exports.client.db("blogs");
-exports.videoCollection = db.collection("video");
+exports.videosCollection = db.collection("videos");
+exports.blogsCollection = db.collection("blogs");
+exports.postsCollection = db.collection("posts");
 function runDb() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

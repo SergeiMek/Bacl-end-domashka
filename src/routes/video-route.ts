@@ -3,7 +3,7 @@ import {errorType, RequestWithBody, RequestWithBodyAndParams, RequestWithParams}
 import {BodyPost} from "../types/video/input";
 import {AvailableResolutions} from "../types/video/output";
 import {UpdateVideoDta} from "../types/video/input";
-import {videoCollection} from "../db/db";
+import {videosCollection} from "../db/db";
 
 export const videoRoute = Router({})
 
@@ -11,16 +11,16 @@ export const videoRoute = Router({})
 
 videoRoute.get('/', async (req: Request, res: Response) => {
     //res.send(videos)
-    const products = await videoCollection.find({}).toArray()
+    const products = await videosCollection.find({}).toArray()
     res.send(products)
 })
 
-videoRoute.get('/:id', (req: RequestWithParams<{
-    id: string
-}>, res: Response) => {
+videoRoute.get('/:id', async (req: RequestWithParams<{ id: string }>, res: Response) => {
     const id: number = +req.params.id
 
-    const video = videos.find((v) => v.id === id)
+    const video = await videosCollection.findOne({id: id})
+
+    //const video = videos.find((v) => v.id === id)
 
     if (!video) {
         res.sendStatus(404)
@@ -47,7 +47,6 @@ videoRoute.post('/', async (req: RequestWithBody<BodyPost>, res: Response) => {
     if (!author || !author.trim() || author.trim().length > 20) {
         errors.errorsMessages.push({message: "Invalid author", field: "author"})
     }
-
 
 
     if (Array.isArray(availableResolutions)) {
@@ -81,13 +80,13 @@ videoRoute.post('/', async (req: RequestWithBody<BodyPost>, res: Response) => {
         publicationDate: publicationDate.toISOString(),
         availableResolutions: availableResolutions
     }
-   /* videos.push(newVideo)
-    res.status(201).send(newVideo)*/
-    const result = await videoCollection.insertOne(newVideo)
+    /* videos.push(newVideo)
+     res.status(201).send(newVideo)*/
+    const result = await videosCollection.insertOne(newVideo)
     res.status(201).send(newVideo)
 })
 
-videoRoute.put('/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVideoDta>, res: Response,) => {
+videoRoute.put('/:id', async (req: RequestWithBodyAndParams<{ id: string }, UpdateVideoDta>, res: Response,) => {
     const id: number = +req.params.id
     let errors: errorType = {
         errorsMessages: []
@@ -103,7 +102,7 @@ videoRoute.put('/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
         errors.errorsMessages.push({message: "Invalid author", field: "author"})
     }
 
-    if (Array.isArray(AvailableResolutions)) {
+    if (Array.isArray(availableResolutions)) {
         availableResolutions.map((m) => {
             !AvailableResolutions.includes(m) && errors.errorsMessages.push({
                 message: "Invalid availableResolutions",
@@ -133,12 +132,15 @@ videoRoute.put('/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
     } else {
         minAgeRestriction = null
     }
+
     if (errors.errorsMessages.length) {
         res.status(400).send(errors)
         return
     }
-    const videoIndex = videos.findIndex(v => v.id === id)
-    const video = videos.find(v => v.id === id)
+
+    const video = await videosCollection.findOne({id: id})
+    /*const videoIndex = videos.findIndex(v => v.id === id)
+    const video = videos.find(v => v.id === id)*/
     if (!video) {
         res.sendStatus(404)
         return;
@@ -154,22 +156,27 @@ videoRoute.put('/:id', (req: RequestWithBodyAndParams<{ id: string }, UpdateVide
 
     }
 
-    videos.splice(videoIndex, 1, updateItem)
-    res.sendStatus(204)
+    //videos.splice(videoIndex, 1, updateItem)
+    const isUpdated = await videosCollection.updateOne({id: id}, {$set: updateItem})
+    if (isUpdated) {
+        res.send(204)
+
+    } else {
+        res.send(404)
+
+    }
+
 })
 
-videoRoute.delete('/:id', (req: RequestWithParams<{
-    id: string
-}>, res) => {
-    for (let i = 0; i < videos.length; i++) {
-        if (videos[i].id === +req.params.id) {
-            videos.splice(i, 1);
-            res.send(204)
-            return
-        }
+videoRoute.delete('/:id', async (req: RequestWithParams<{ id: string }>, res) => {
+    const result = await videosCollection.deleteOne({id: +req.params.id})
+    if (result.deletedCount === 1) {
+        res.send(204)
+        return
+    } else {
+        res.send(404)
+        return
     }
-    res.send(404)
-
 })
 
 

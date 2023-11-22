@@ -1,49 +1,64 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostRepository = void 0;
 const db_1 = require("../db/db");
 class PostRepository {
     static getAllPosts() {
-        return db_1.db.posts;
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield db_1.postsCollection.find({}).toArray();
+        });
     }
     static getPostById(id) {
-        const post = db_1.db.posts.find(b => b.id === id);
+        const post = db_1.postsCollection.findOne({ id: id });
         if (!post) {
             return null;
         }
         return post;
     }
     static createPost(newBlogParam) {
-        let { content, shortDescription, title, blogId } = newBlogParam;
-        const newPost = {
-            id: String(+(new Date())),
-            title: title,
-            shortDescription: shortDescription,
-            content: content,
-            blogId: blogId,
-            blogName: ''
-        };
-        db_1.db.posts.push(newPost);
-        return newPost;
+        return __awaiter(this, void 0, void 0, function* () {
+            let { content, shortDescription, title, blogId } = newBlogParam;
+            const newPost = {
+                id: String(+(new Date())),
+                title: title,
+                shortDescription: shortDescription,
+                content: content,
+                blogId: blogId,
+                blogName: '',
+                createdAt: new Date().toISOString()
+            };
+            const result = yield db_1.postsCollection.insertOne(newPost);
+            return newPost;
+        });
     }
     static updatePost(id, postBody) {
-        const postIndex = db_1.db.posts.findIndex(v => v.id === id);
-        let post = db_1.db.posts.find(b => b.id === id);
-        if (post) {
-            const updatePost = Object.assign(Object.assign({}, post), postBody);
-            db_1.db.posts.splice(postIndex, 1, updatePost);
-            return true;
-        }
-        return false;
+        return __awaiter(this, void 0, void 0, function* () {
+            //const postIndex = db.posts.findIndex(v => v.id === id)
+            const post = db_1.postsCollection.findOne({ id: id });
+            if (post) {
+                const updatePost = Object.assign(Object.assign({}, post), postBody);
+                let result = yield db_1.postsCollection.updateOne({ id: id }, { $set: updatePost });
+                if (result.matchedCount === 1) {
+                    return true;
+                }
+            }
+            return false;
+        });
     }
     static deletePost(id) {
-        for (let i = 0; i < db_1.db.posts.length; i++) {
-            if (db_1.db.posts[i].id === id) {
-                db_1.db.posts.splice(i, 1);
-                return true;
-            }
-        }
-        return false;
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield db_1.postsCollection.deleteOne({ id: id });
+            return result.deletedCount === 1;
+        });
     }
 }
 exports.PostRepository = PostRepository;

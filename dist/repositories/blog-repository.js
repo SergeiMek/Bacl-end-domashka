@@ -1,46 +1,65 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogRepository = void 0;
 const db_1 = require("../db/db");
 class BlogRepository {
     static getAllBlogs() {
-        return db_1.db.blogs;
+        return __awaiter(this, void 0, void 0, function* () {
+            return db_1.blogsCollection.find({}).toArray();
+        });
     }
     static getBlogById(id) {
-        const blog = db_1.db.blogs.find(b => b.id === id);
-        if (!blog) {
-            return null;
-        }
-        return blog;
+        return __awaiter(this, void 0, void 0, function* () {
+            const blog = db_1.blogsCollection.findOne({ id: id });
+            if (!blog) {
+                return null;
+            }
+            return blog;
+        });
     }
     static createBlog(newBlogParam) {
-        const newBlog = {
-            id: String(+(new Date())),
-            name: newBlogParam.name,
-            description: newBlogParam.description,
-            websiteUrl: newBlogParam.websiteUrl
-        };
-        db_1.db.blogs.push(newBlog);
-        return newBlog;
+        return __awaiter(this, void 0, void 0, function* () {
+            const newBlog = {
+                id: String(+(new Date())),
+                name: newBlogParam.name,
+                description: newBlogParam.description,
+                websiteUrl: newBlogParam.websiteUrl,
+                createdAt: new Date().toISOString(),
+                isMembership: false
+            };
+            const result = yield db_1.blogsCollection.insertOne(newBlog);
+            return newBlog;
+        });
     }
     static updateBlog(id, blogBody) {
-        const blogIndex = db_1.db.blogs.findIndex(v => v.id === id);
-        let blog = db_1.db.blogs.find(b => b.id === id);
-        if (blog) {
-            const updateBlog = Object.assign(Object.assign({}, blog), blogBody);
-            db_1.db.blogs.splice(blogIndex, 1, updateBlog);
-            return true;
-        }
-        return false;
+        return __awaiter(this, void 0, void 0, function* () {
+            //const blogIndex = db.blogs.findIndex(v => v.id === id)
+            //let blog = db.blogs.find(b => b.id === id)
+            const blog = yield db_1.blogsCollection.findOne({ id: id });
+            if (blog) {
+                const updateBlog = Object.assign(Object.assign({}, blog), blogBody);
+                const result = yield db_1.blogsCollection.updateOne({ id: id }, { $set: updateBlog });
+                if (result.matchedCount === 1) {
+                    return true;
+                }
+            }
+            return false;
+        });
     }
     static deleteBlog(id) {
-        for (let i = 0; i < db_1.db.blogs.length; i++) {
-            if (db_1.db.blogs[i].id === id) {
-                db_1.db.blogs.splice(i, 1);
-                return true;
-            }
-        }
-        return false;
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield db_1.blogsCollection.deleteOne({ id: id });
+            return result.deletedCount === 1;
+        });
     }
 }
 exports.BlogRepository = BlogRepository;

@@ -6,7 +6,6 @@ const blog_repository_1 = require("../repositories/blog-repository");
 const input_model_validation_1 = require("../middlewares/inputModel/input-model-validation");
 const blogIdValidation = (0, express_validator_1.body)('blogId').isString().trim().custom((value) => {
     const blog = blog_repository_1.BlogRepository.getBlogById(value);
-    debugger;
     if (!blog) {
         throw new Error("Incorrect blogId");
     }
