@@ -14,16 +14,32 @@ const db_1 = require("../db/db");
 class BlogRepository {
     static getAllBlogs() {
         return __awaiter(this, void 0, void 0, function* () {
-            return db_1.blogsCollection.find({}).toArray();
+            //return blogsCollection.find({}).toArray()
+            const result = yield db_1.blogsCollection.find({}).toArray();
+            return result.map(m => ({
+                id: m.id,
+                name: m.name,
+                description: m.description,
+                websiteUrl: m.websiteUrl,
+                createdAt: m.createdAt,
+                isMembership: m.isMembership
+            }));
         });
     }
     static getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = db_1.blogsCollection.findOne({ id: id });
+            const blog = yield db_1.blogsCollection.findOne({ id: id });
             if (!blog) {
                 return null;
             }
-            return blog;
+            return {
+                id: blog.id,
+                name: blog.name,
+                description: blog.description,
+                websiteUrl: blog.websiteUrl,
+                createdAt: blog.createdAt,
+                isMembership: blog.isMembership
+            };
         });
     }
     static createBlog(newBlogParam) {
