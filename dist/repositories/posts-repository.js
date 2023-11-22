@@ -14,11 +14,11 @@ const db_1 = require("../db/db");
 class PostRepository {
     static getAllPosts() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield db_1.postsCollection.find({}).toArray();
+            return yield db_1.postsCollection.find({}, { projection: { _id: 0 } }).toArray();
         });
     }
     static getPostById(id) {
-        const post = db_1.postsCollection.findOne({ id: id });
+        const post = db_1.postsCollection.findOne({ id: id }, { projection: { _id: 0 } });
         if (!post) {
             return null;
         }

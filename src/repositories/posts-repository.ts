@@ -5,11 +5,11 @@ import {postsRoute} from "../routes/posts-route";
 
 export class PostRepository {
     static async getAllPosts() {
-        return await postsCollection.find({}).toArray()
+        return await postsCollection.find({},{projection: {_id: 0}}).toArray()
     }
 
     static getPostById(id: string) {
-        const post = postsCollection.findOne({id: id})
+        const post = postsCollection.findOne({id: id},{projection: {_id: 0}})
         if (!post) {
             return null
         }
