@@ -14,6 +14,7 @@ if(!mongoURI){
     throw new Error('! URL doesnt found')
 }
 
+
 export const client = new MongoClient(mongoURI)
 const db =  client.db("blogs")
 
