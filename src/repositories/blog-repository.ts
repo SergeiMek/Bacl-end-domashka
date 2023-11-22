@@ -7,31 +7,16 @@ import {blogsRoute} from "../routes/blog-route";
 export class BlogRepository {
     static async getAllBlogs(): Promise<Array<blogsType>> {
         //return blogsCollection.find({}).toArray()
-        const result = await blogsCollection.find({}).toArray()
-        return result.map(m => ({
-            id: m.id,
-            name: m.name,
-            description: m.description,
-            websiteUrl: m.websiteUrl,
-            createdAt: m.createdAt,
-            isMembership: m.isMembership
-
-        }))
+        const result = await blogsCollection.find({}, {projection: {_id: 0}}).toArray()
+        return result
     }
 
     static async getBlogById(id: string): Promise<blogsType | null> {
-        const blog = await blogsCollection.findOne({id: id})
+        const blog = await blogsCollection.findOne({id: id}, {projection: {_id: 0}})
         if (!blog) {
             return null
         }
-        return {
-            id: blog.id,
-            name: blog.name,
-            description: blog.description,
-            websiteUrl: blog.websiteUrl,
-            createdAt: blog.createdAt,
-            isMembership: blog.isMembership
-        }
+        return blog
     }
 
     static async createBlog(newBlogParam: BlogsBodyType): Promise<blogsType> {

@@ -15,31 +15,17 @@ class BlogRepository {
     static getAllBlogs() {
         return __awaiter(this, void 0, void 0, function* () {
             //return blogsCollection.find({}).toArray()
-            const result = yield db_1.blogsCollection.find({}).toArray();
-            return result.map(m => ({
-                id: m.id,
-                name: m.name,
-                description: m.description,
-                websiteUrl: m.websiteUrl,
-                createdAt: m.createdAt,
-                isMembership: m.isMembership
-            }));
+            const result = yield db_1.blogsCollection.find({}, { projection: { _id: 0 } }).toArray();
+            return result;
         });
     }
     static getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield db_1.blogsCollection.findOne({ id: id });
+            const blog = yield db_1.blogsCollection.findOne({ id: id }, { projection: { _id: 0 } });
             if (!blog) {
                 return null;
             }
-            return {
-                id: blog.id,
-                name: blog.name,
-                description: blog.description,
-                websiteUrl: blog.websiteUrl,
-                createdAt: blog.createdAt,
-                isMembership: blog.isMembership
-            };
+            return blog;
         });
     }
     static createBlog(newBlogParam) {
