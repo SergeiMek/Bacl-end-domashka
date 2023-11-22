@@ -5,11 +5,11 @@ import {postsRoute} from "../routes/posts-route";
 
 export class PostRepository {
     static async getAllPosts() {
-        return await postsCollection.find({},{projection: {_id: 0}}).toArray()
+        return await postsCollection.find({}, {projection: {_id: 0}}).toArray()
     }
 
     static getPostById(id: string) {
-        const post = postsCollection.findOne({id: id},{projection: {_id: 0}})
+        const post = postsCollection.findOne({id: id}, {projection: {_id: 0}})
         if (!post) {
             return null
         }
@@ -28,7 +28,15 @@ export class PostRepository {
             createdAt: new Date().toISOString()
         }
         const result = await postsCollection.insertOne(newPost)
-        return newPost
+        return {
+            id: newPost.id,
+            title: newPost.title,
+            shortDescription: newPost.shortDescription,
+            content: newPost.content,
+            blogId: newPost.blogId,
+            blogName: '',
+            createdAt: newPost.createdAt
+        }
     }
 
     static async updatePost(id: string, postBody: postBodyType) {
