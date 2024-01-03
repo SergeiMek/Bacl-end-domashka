@@ -41,8 +41,8 @@ export class QueryBlogRepository {
         //const result = await blogsCollection.find({}, {projection: {_id: 0}}).toArray()
         return {
             pagesCount: pageCount,
-            page: pageNumber,
-            pageSize: pageSize,
+            page: +pageNumber,
+            pageSize: +pageSize,
             totalCount: totalCount,
             items: this._mapDbBlogToBlogOutputModel(blogs)
         }
