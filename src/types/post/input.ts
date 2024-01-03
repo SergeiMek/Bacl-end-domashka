@@ -3,8 +3,8 @@ export type  paramsPost = {
 }
 
 export type sorPostData = {
-    pageNumber: string
-    pageSize: string
-    sortBy: string
-    sortDirection: 'asc' | 'desc'
+    pageNumber?: string
+    pageSize?: string
+    sortBy?: string
+    sortDirection?: 'asc' | 'desc'
 }
