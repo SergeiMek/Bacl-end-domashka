@@ -1,7 +1,7 @@
 import {postOutputModel, postsType} from "../types/post/output";
-import {blogsCollection, postsCollection} from "../db/db";
+import {postsCollection} from "../db/db";
 import {sorPostData} from "../types/post/input";
-import {blogsType} from "../types/blog/output";
+
 
 
 export class QueryPostRepository {
@@ -21,7 +21,7 @@ export class QueryPostRepository {
             .toArray()
 
 
-        const totalCount = await blogsCollection.countDocuments()
+        const totalCount = await postsCollection.countDocuments()
 
         const pageCount = Math.ceil(totalCount / +pageSize)
 
