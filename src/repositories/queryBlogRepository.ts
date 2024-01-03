@@ -81,8 +81,8 @@ export class QueryBlogRepository {
 
         return {
             pagesCount: pageCount,
-            page: pageNumber,
-            pageSize: pageSize,
+            page: +pageNumber,
+            pageSize: +pageSize,
             totalCount: totalCount,
             items: QueryPostRepository.mapDbPostToPostOutputModel(posts)
         }
