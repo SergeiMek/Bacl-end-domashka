@@ -22,6 +22,7 @@ exports.postsRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, f
     const post = yield posts_repository_1.PostRepository.getPostById(req.params.id);
     if (!post) {
         res.send(404);
+        return;
     }
     return res.send(post);
 }));

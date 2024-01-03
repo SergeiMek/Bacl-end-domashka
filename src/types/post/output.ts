@@ -1,3 +1,5 @@
+import {blogsType} from "../blog/output";
+
 export type postsType = {
     id: string
     title: string
@@ -13,4 +15,12 @@ export type postBodyType = {
     shortDescription: string
     content: string
     blogId: string
+}
+
+export type postOutputModel = {
+    pagesCount: number,
+    page: number,
+    pageSize: number,
+    totalCount: number,
+    items: Array<postsType> | null | void
 }

@@ -58,6 +58,7 @@ export class PostRepository {
         return false
     }
 
+
     static async deletePost(id: string) {
         const result = await postsCollection.deleteOne({id: id})
         return result.deletedCount === 1

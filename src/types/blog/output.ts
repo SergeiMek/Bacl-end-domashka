@@ -8,3 +8,11 @@ export type blogsType = {
     createdAt:string
     isMembership:boolean
 }
+
+export type blogOutputModel = {
+    pagesCount: number,
+    page: number,
+    pageSize: number,
+    totalCount: number,
+    items: Array<blogsType> | null
+}

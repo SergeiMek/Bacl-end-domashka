@@ -11,23 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogRepository = void 0;
 const db_1 = require("../db/db");
+const queryBlogRepository_1 = require("./queryBlogRepository");
 class BlogRepository {
-    static getAllBlogs() {
-        return __awaiter(this, void 0, void 0, function* () {
-            //return blogsCollection.find({}).toArray()
-            const result = yield db_1.blogsCollection.find({}, { projection: { _id: 0 } }).toArray();
-            return result;
-        });
-    }
-    static getBlogById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield db_1.blogsCollection.findOne({ id: id }, { projection: { _id: 0 } });
-            if (!blog) {
-                return null;
-            }
-            return blog;
-        });
-    }
     static createBlog(newBlogParam) {
         return __awaiter(this, void 0, void 0, function* () {
             const newBlog = {
@@ -38,14 +23,11 @@ class BlogRepository {
                 createdAt: new Date().toISOString(),
                 isMembership: false
             };
-            const result = yield db_1.blogsCollection.insertOne(newBlog);
-            return newBlog;
+            return yield db_1.blogsCollection.insertOne(newBlog);
         });
     }
     static updateBlog(id, blogBody) {
         return __awaiter(this, void 0, void 0, function* () {
-            //const blogIndex = db.blogs.findIndex(v => v.id === id)
-            //let blog = db.blogs.find(b => b.id === id)
             const blog = yield db_1.blogsCollection.findOne({ id: id });
             if (blog) {
                 const updateBlog = Object.assign(Object.assign({}, blog), blogBody);
@@ -55,6 +37,22 @@ class BlogRepository {
                 }
             }
             return false;
+        });
+    }
+    static createPostToBlog(blogId, postData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const blog = yield queryBlogRepository_1.QueryBlogRepository.getBlogById(blogId);
+            const post = {
+                id: String(+(new Date())),
+                title: postData.title,
+                shortDescription: postData.shortDescription,
+                content: postData.content,
+                blogId: blogId,
+                blogName: blog.name,
+                createdAt: new Date().toISOString()
+            };
+            const res = yield db_1.postsCollection.insertOne(post);
+            return post.id;
         });
     }
     static deleteBlog(id) {

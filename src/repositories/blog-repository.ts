@@ -1,25 +1,14 @@
-import {BlogsBodyType} from "../types/blog/input";
-import {blogsCollection, videosCollection} from "../db/db";
+import {BlogsBodyType, postDataType, SortDataType} from "../types/blog/input";
+import {blogsCollection, postsCollection, videosCollection} from "../db/db";
 import {blogsType} from "../types/blog/output";
 import {blogsRoute} from "../routes/blog-route";
+import {InsertOneResult} from "mongodb";
+import {QueryBlogRepository} from "./queryBlogRepository";
 
 
 export class BlogRepository {
-    static async getAllBlogs(): Promise<Array<blogsType>> {
-        //return blogsCollection.find({}).toArray()
-        const result = await blogsCollection.find({}, {projection: {_id: 0}}).toArray()
-        return result
-    }
 
-    static async getBlogById(id: string): Promise<blogsType | null> {
-        const blog = await blogsCollection.findOne({id: id}, {projection: {_id: 0}})
-        if (!blog) {
-            return null
-        }
-        return blog
-    }
-
-    static async createBlog(newBlogParam: BlogsBodyType): Promise<blogsType> {
+    static async createBlog(newBlogParam: BlogsBodyType): Promise<InsertOneResult<blogsType>> {
 
         const newBlog = {
             id: String(+(new Date())),
@@ -29,27 +18,15 @@ export class BlogRepository {
             createdAt: new Date().toISOString(),
             isMembership: false
         }
-        const result = await blogsCollection.insertOne(newBlog)
-        return {
-            id: newBlog.id,
-            name: newBlog.name,
-            description: newBlog.description,
-            websiteUrl: newBlog.websiteUrl,
-            createdAt: newBlog.createdAt,
-            isMembership: false
-        }
+
+        return await blogsCollection.insertOne(newBlog)
     }
 
     static async updateBlog(id: string, blogBody: BlogsBodyType): Promise<boolean> {
-        //const blogIndex = db.blogs.findIndex(v => v.id === id)
-        //let blog = db.blogs.find(b => b.id === id)
         const blog = await blogsCollection.findOne({id: id})
         if (blog) {
             const updateBlog = {
                 ...blog,
-                /* name: blogBody.name,
-                 description: blogBody.description,
-                 websiteUrl: blogBody.websiteUrl*/
                 ...blogBody
             }
             const result = await blogsCollection.updateOne({id: id}, {$set: updateBlog})
@@ -58,6 +35,23 @@ export class BlogRepository {
             }
         }
         return false
+    }
+
+    static async createPostToBlog(blogId: string, postData: postDataType) {
+        const blog = await QueryBlogRepository.getBlogById(blogId)
+
+        const post = {
+            id: String(+(new Date())),
+            title: postData.title,
+            shortDescription: postData.shortDescription,
+            content: postData.content,
+            blogId: blogId,
+            blogName: blog!.name,
+            createdAt: new Date().toISOString()
+        }
+
+        const res = await postsCollection.insertOne(post)
+        return post.id
     }
 
     static async deleteBlog(id: string) {

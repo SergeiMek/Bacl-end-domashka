@@ -14,26 +14,68 @@ const express_1 = require("express");
 const blog_repository_1 = require("../repositories/blog-repository");
 const blogs_validator_1 = require("../validators/blogs-validator");
 const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
+const blog_service_1 = require("../domain/blog-service");
+const queryBlogRepository_1 = require("../repositories/queryBlogRepository");
+const posts_repository_1 = require("../repositories/posts-repository");
 exports.blogsRoute = (0, express_1.Router)({});
 exports.blogsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const foundProducts = yield blog_repository_1.BlogRepository.getAllBlogs();
+    const sortData = {
+        searchNameTerm: req.query.searchNameTerm,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection,
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+    };
+    const foundProducts = yield queryBlogRepository_1.QueryBlogRepository.getBlogs(sortData);
     res.send(foundProducts);
 }));
 exports.blogsRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const blog = yield blog_repository_1.BlogRepository.getBlogById(req.params.id);
+    const blog = yield queryBlogRepository_1.QueryBlogRepository.getBlogById(req.params.id);
     if (!blog) {
         res.sendStatus(404);
+        return;
     }
-    return res.send(blog);
+    debugger;
+    return res.status(200).send(blog);
+}));
+exports.blogsRoute.get('/:id/posts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const sortData = {
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection,
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+    };
+    const id = req.params.id;
+    const posts = yield queryBlogRepository_1.QueryBlogRepository.getPostsByBlogId(id, sortData);
+    return res.status(200).send(posts);
+}));
+exports.blogsRoute.post('/:id/posts', auth_middleware_1.authMiddleware, (0, blogs_validator_1.createdPostInBlogValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const title = req.body.title;
+    const shortDescription = req.body.shortDescription;
+    const content = req.body.content;
+    const blogId = req.params.id;
+    const blog = yield queryBlogRepository_1.QueryBlogRepository.getBlogById(blogId);
+    if (!blog) {
+        res.sendStatus(404);
+        return;
+    }
+    const createdPostId = yield blog_repository_1.BlogRepository.createPostToBlog(blogId, { title, shortDescription, content });
+    const post = yield posts_repository_1.PostRepository.getPostById(createdPostId);
+    if (!post) {
+        res.sendStatus(404);
+        return;
+    }
+    res.status(201).send(post);
 }));
 exports.blogsRoute.post('/', auth_middleware_1.authMiddleware, (0, blogs_validator_1.blogPostValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newProduct = {
+    const newBlogData = {
         name: req.body.name,
         description: req.body.description,
         websiteUrl: req.body.websiteUrl
     };
-    const result = yield blog_repository_1.BlogRepository.createBlog(newProduct);
-    return res.status(201).send(result);
+    ///const result = await BlogRepository.createBlog(newProduct)
+    const blog = yield blog_service_1.BlogService.createBlog(newBlogData);
+    return res.status(201).send(blog);
 }));
 exports.blogsRoute.put('/:id', auth_middleware_1.authMiddleware, (0, blogs_validator_1.blogPostValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const updateParams = {
@@ -48,6 +90,15 @@ exports.blogsRoute.put('/:id', auth_middleware_1.authMiddleware, (0, blogs_valid
     else {
         res.send(404);
     }
+}));
+exports.blogsRoute.post('/:id/posts', auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const { title, shortDescription, content } = req.body;
+    const post = yield blog_service_1.BlogService.creatPostToBlog(id, { title, shortDescription, content });
+    if (!post) {
+        res.send(404);
+    }
+    res.send(post);
 }));
 exports.blogsRoute.delete('/:id', auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
