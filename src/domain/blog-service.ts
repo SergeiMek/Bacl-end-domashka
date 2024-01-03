@@ -1,10 +1,21 @@
 import {newBlogDataType, postDataType} from "../types/blog/input";
 import {BlogRepository} from "../repositories/blog-repository";
 import {PostRepository} from "../repositories/posts-repository";
+import {QueryBlogRepository} from "../repositories/queryBlogRepository";
 
 export class BlogService {
     static async createBlog(newBlogData: newBlogDataType) {
-         await BlogRepository.createBlog(newBlogData)
+        const newBlog = {
+            id: String(+(new Date())),
+            name: newBlogData.name,
+            description: newBlogData.description,
+            websiteUrl: newBlogData.websiteUrl,
+            createdAt: new Date().toISOString(),
+            isMembership: false
+        }
+          await BlogRepository.createBlog(newBlog)
+        return await QueryBlogRepository.getBlogById(newBlog.id)
+
     }
     static async creatPostToBlog(blogId:string,postData:postDataType) {
         const post={

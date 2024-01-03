@@ -35,7 +35,6 @@ exports.blogsRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, f
         res.sendStatus(404);
         return;
     }
-    debugger;
     return res.status(200).send(blog);
 }));
 exports.blogsRoute.get('/:id/posts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

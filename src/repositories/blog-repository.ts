@@ -8,18 +8,9 @@ import {QueryBlogRepository} from "./queryBlogRepository";
 
 export class BlogRepository {
 
-    static async createBlog(newBlogParam: BlogsBodyType): Promise<InsertOneResult<blogsType>> {
+    static async createBlog(postData: blogsType): Promise<InsertOneResult<blogsType>> {
 
-        const newBlog = {
-            id: String(+(new Date())),
-            name: newBlogParam.name,
-            description: newBlogParam.description,
-            websiteUrl: newBlogParam.websiteUrl,
-            createdAt: new Date().toISOString(),
-            isMembership: false
-        }
-
-        return await blogsCollection.insertOne(newBlog)
+        return await blogsCollection.insertOne(postData)
     }
 
     static async updateBlog(id: string, blogBody: BlogsBodyType): Promise<boolean> {

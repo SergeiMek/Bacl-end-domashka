@@ -13,17 +13,9 @@ exports.BlogRepository = void 0;
 const db_1 = require("../db/db");
 const queryBlogRepository_1 = require("./queryBlogRepository");
 class BlogRepository {
-    static createBlog(newBlogParam) {
+    static createBlog(postData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newBlog = {
-                id: String(+(new Date())),
-                name: newBlogParam.name,
-                description: newBlogParam.description,
-                websiteUrl: newBlogParam.websiteUrl,
-                createdAt: new Date().toISOString(),
-                isMembership: false
-            };
-            return yield db_1.blogsCollection.insertOne(newBlog);
+            return yield db_1.blogsCollection.insertOne(postData);
         });
     }
     static updateBlog(id, blogBody) {

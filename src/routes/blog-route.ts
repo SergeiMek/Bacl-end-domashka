@@ -34,7 +34,6 @@ blogsRoute.get('/:id', async (req: RequestWithParams<BlogsParams>, res: Response
         res.sendStatus(404)
         return
     }
-    debugger
     return res.status(200).send(blog)
 })
 
