@@ -37,7 +37,7 @@ blogsRoute.get('/:id', async (req: RequestWithParams<BlogsParams>, res: Response
     return res.status(200).send(blog)
 })
 
-blogsRoute.get('/:id/posts', async (req: RequestWithParamsAndQuery<BlogsParams,BlogsQueryType>, res: Response) => {
+blogsRoute.get('/:id/posts', async (req: RequestWithParamsAndQuery<BlogsParams, BlogsQueryType>, res: Response) => {
 
     const sortData = {
         sortBy: req.query.sortBy,
@@ -46,8 +46,14 @@ blogsRoute.get('/:id/posts', async (req: RequestWithParamsAndQuery<BlogsParams,B
         pageSize: req.query.pageSize,
     }
     const id = req.params.id
+    const blog = await QueryBlogRepository.getBlogById(id)
 
-    const posts = await QueryBlogRepository.getPostsByBlogId(id,sortData)
+    if (!blog) {
+        res.sendStatus(404)
+        return
+    }
+
+    const posts = await QueryBlogRepository.getPostsByBlogId(id, sortData)
 
     return res.status(200).send(posts)
 })
@@ -62,15 +68,15 @@ blogsRoute.post('/:id/posts', authMiddleware, createdPostInBlogValidation(), asy
     const blog = await QueryBlogRepository.getBlogById(blogId)
 
 
-    if(!blog){
+    if (!blog) {
         res.sendStatus(404)
         return
     }
 
- const createdPostId = await BlogRepository.createPostToBlog(blogId,{title,shortDescription,content})
+    const createdPostId = await BlogRepository.createPostToBlog(blogId, {title, shortDescription, content})
 
     const post = await PostRepository.getPostById(createdPostId)
-    if(!post){
+    if (!post) {
         res.sendStatus(404)
         return
     }

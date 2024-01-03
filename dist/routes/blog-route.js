@@ -45,6 +45,11 @@ exports.blogsRoute.get('/:id/posts', (req, res) => __awaiter(void 0, void 0, voi
         pageSize: req.query.pageSize,
     };
     const id = req.params.id;
+    const blog = yield queryBlogRepository_1.QueryBlogRepository.getBlogById(id);
+    if (!blog) {
+        res.sendStatus(404);
+        return;
+    }
     const posts = yield queryBlogRepository_1.QueryBlogRepository.getPostsByBlogId(id, sortData);
     return res.status(200).send(posts);
 }));
