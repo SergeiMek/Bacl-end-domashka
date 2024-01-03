@@ -19,8 +19,9 @@ postsRoute.get('/', async (req: RequestTypeWithQuery<sorPostData>, res: Response
         sortBy: req.query.sortBy,
         sortDirection: req.query.sortDirection
     }
-    return  await QueryPostRepository.getPosts(sortData)
+    const foundProducts =   await QueryPostRepository.getPosts(sortData)
 
+    return res.status(200).send(foundProducts)
 })
 
 postsRoute.get('/:id', async (req: RequestWithParams<paramsPost>, res: Response) => {
