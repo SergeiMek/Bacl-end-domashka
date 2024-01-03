@@ -1,11 +1,49 @@
-import {postsType} from "../types/post/output";
+import {postOutputModel, postsType} from "../types/post/output";
+import {blogsCollection, postsCollection} from "../db/db";
+import {sorPostData} from "../types/post/input";
+import {blogsType} from "../types/blog/output";
 
 
 export class QueryPostRepository {
+    static async getPosts(sortData: sorPostData): Promise<postOutputModel> {
 
-    static mapDbPostToPostOutputModel(DBPost: Array<postsType>):Array<postsType> {
+        const pageNumber = sortData.pageNumber ?? 1
+        const pageSize = sortData.pageSize ?? 10
+        const sortBy = sortData.sortBy ?? 'createdAt'
+        const sortDirection = sortData.sortDirection ?? 'desc'
 
-       return  DBPost.map(p => ({
+
+        const posts: Array<postsType> = await postsCollection
+            .find({})
+            .sort(sortBy, sortDirection)
+            .skip((+pageNumber - 1) * +pageSize)
+            .limit(+pageSize)
+            .toArray()
+
+
+        const totalCount = await blogsCollection.countDocuments({})
+
+        const pageCount = Math.ceil(totalCount / +pageSize)
+
+        return {
+            pagesCount: pageCount,
+            page: +pageNumber,
+            pageSize: +pageSize,
+            totalCount: totalCount,
+            items: this.mapDbPostToPostOutputModel(posts)
+        }
+    }
+    static async getPostById(id: string): Promise<postsType | null> {
+        const post = await postsCollection.findOne({id: id})
+        if (!post) {
+            return null
+        }
+        return post
+    }
+
+    static mapDbPostToPostOutputModel(DBPost: Array<postsType>): Array<postsType> {
+
+        return DBPost.map(p => ({
             id: p.id,
             title: p.title,
             shortDescription: p.shortDescription,

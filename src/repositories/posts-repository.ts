@@ -4,17 +4,15 @@ import {postBodyType} from "../types/post/output";
 import {postsRoute} from "../routes/posts-route";
 
 export class PostRepository {
-    static async getAllPosts() {
-        return await postsCollection.find({}, {projection: {_id: 0}}).toArray()
-    }
 
-    static getPostById(id: string) {
+
+   /* static getPostById(id: string) {
         const post = postsCollection.findOne({id: id}, {projection: {_id: 0}})
         if (!post) {
             return null
         }
         return post
-    }
+    }*/
 
     static async createPost(newBlogParam: postBodyType) {
         let {content, shortDescription, title, blogId} = newBlogParam

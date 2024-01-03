@@ -14,9 +14,16 @@ const express_1 = require("express");
 const posts_repository_1 = require("../repositories/posts-repository");
 const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
 const post_validator_1 = require("../validators/post-validator");
+const queryPostRepository_1 = require("../repositories/queryPostRepository");
 exports.postsRoute = (0, express_1.Router)({});
 exports.postsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send(yield posts_repository_1.PostRepository.getAllPosts());
+    const sortData = {
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection
+    };
+    return yield queryPostRepository_1.QueryPostRepository.getPosts(sortData);
 }));
 exports.postsRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const post = yield posts_repository_1.PostRepository.getPostById(req.params.id);

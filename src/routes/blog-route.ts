@@ -1,6 +1,12 @@
 import {Request, Response, Router} from "express";
 import {BlogRepository} from "../repositories/blog-repository";
-import {RequestWithBody, RequestWithBodyAndParams, RequestWithParams, RequestWithParamsAndQuery} from "../types/common";
+import {
+    RequestTypeWithQuery,
+    RequestWithBody,
+    RequestWithBodyAndParams,
+    RequestWithParams,
+    RequestWithParamsAndQuery
+} from "../types/common";
 import {BlogsBodyType, BlogsParams, BlogsQueryType, postDataType, SortDataType} from "../types/blog/input";
 import {blogPostValidation, createdPostInBlogValidation} from "../validators/blogs-validator";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
@@ -8,9 +14,10 @@ import {BlogService} from "../domain/blog-service";
 import {QueryBlogRepository} from "../repositories/queryBlogRepository";
 import {postBodyType} from "../types/post/output";
 import {PostRepository} from "../repositories/posts-repository";
+import {QueryPostRepository} from "../repositories/queryPostRepository";
 
 
-type RequestTypeWithQuery<Q> = Request<{}, {}, {}, Q>
+
 
 export const blogsRoute = Router({})
 
@@ -75,7 +82,7 @@ blogsRoute.post('/:id/posts', authMiddleware, createdPostInBlogValidation(), asy
 
     const createdPostId = await BlogRepository.createPostToBlog(blogId, {title, shortDescription, content})
 
-    const post = await PostRepository.getPostById(createdPostId)
+    const post = await QueryPostRepository.getPostById(createdPostId)
     if (!post) {
         res.sendStatus(404)
         return

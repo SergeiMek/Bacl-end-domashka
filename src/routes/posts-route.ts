@@ -1,17 +1,26 @@
 import {Request, Response, Router} from "express";
 import {PostRepository} from "../repositories/posts-repository";
-import {RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../types/common";
-import {paramsPost} from "../types/post/input";
+import {RequestTypeWithQuery, RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../types/common";
+import {paramsPost, sorPostData} from "../types/post/input";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {postBodyType, postsType} from "../types/post/output";
 import {postValidation} from "../validators/post-validator";
+import {SortDataType} from "../types/blog/input";
+import {QueryBlogRepository} from "../repositories/queryBlogRepository";
+import {QueryPostRepository} from "../repositories/queryPostRepository";
 
 
 export const postsRoute = Router({})
 
-postsRoute.get('/', async (req: Request, res: Response): Promise<void> => {
+postsRoute.get('/', async (req: RequestTypeWithQuery<sorPostData>, res: Response): Promise<any> => {
+    const sortData = {
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection
+    }
+    return  await QueryPostRepository.getPosts(sortData)
 
-    res.send(await PostRepository.getAllPosts())
 })
 
 postsRoute.get('/:id', async (req: RequestWithParams<paramsPost>, res: Response) => {
