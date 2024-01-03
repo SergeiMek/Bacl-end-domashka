@@ -24,7 +24,7 @@ postsRoute.get('/', async (req: RequestTypeWithQuery<sorPostData>, res: Response
 })
 
 postsRoute.get('/:id', async (req: RequestWithParams<paramsPost>, res: Response) => {
-    const post = await PostRepository.getPostById(req.params.id)
+    const post = await QueryPostRepository.getPostById(req.params.id)
     if (!post) {
         res.send(404)
         return

@@ -16,7 +16,7 @@ const blogs_validator_1 = require("../validators/blogs-validator");
 const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
 const blog_service_1 = require("../domain/blog-service");
 const queryBlogRepository_1 = require("../repositories/queryBlogRepository");
-const posts_repository_1 = require("../repositories/posts-repository");
+const queryPostRepository_1 = require("../repositories/queryPostRepository");
 exports.blogsRoute = (0, express_1.Router)({});
 exports.blogsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const sortData = {
@@ -64,7 +64,7 @@ exports.blogsRoute.post('/:id/posts', auth_middleware_1.authMiddleware, (0, blog
         return;
     }
     const createdPostId = yield blog_repository_1.BlogRepository.createPostToBlog(blogId, { title, shortDescription, content });
-    const post = yield posts_repository_1.PostRepository.getPostById(createdPostId);
+    const post = yield queryPostRepository_1.QueryPostRepository.getPostById(createdPostId);
     if (!post) {
         res.sendStatus(404);
         return;
