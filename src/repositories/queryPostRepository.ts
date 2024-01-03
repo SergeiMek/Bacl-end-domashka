@@ -14,14 +14,14 @@ export class QueryPostRepository {
 
 
         const posts: Array<postsType> = await postsCollection
-            .find({})
+            .find()
             .sort(sortBy, sortDirection)
             .skip((+pageNumber - 1) * +pageSize)
             .limit(+pageSize)
             .toArray()
 
 
-        const totalCount = await blogsCollection.countDocuments({})
+        const totalCount = await blogsCollection.countDocuments()
 
         const pageCount = Math.ceil(totalCount / +pageSize)
 

@@ -23,7 +23,8 @@ exports.postsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, func
         sortBy: req.query.sortBy,
         sortDirection: req.query.sortDirection
     };
-    return yield queryPostRepository_1.QueryPostRepository.getPosts(sortData);
+    const foundProducts = yield queryPostRepository_1.QueryPostRepository.getPosts(sortData);
+    return res.status(200).send(foundProducts);
 }));
 exports.postsRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const post = yield queryPostRepository_1.QueryPostRepository.getPostById(req.params.id);
