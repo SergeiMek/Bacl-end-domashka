@@ -33,8 +33,9 @@ export class QueryPostRepository {
             items: this.mapDbPostToPostOutputModel(posts)
         }
     }
+
     static async getPostById(id: string): Promise<postsType | null> {
-        const post = await postsCollection.findOne({id: id})
+        const post = await postsCollection.findOne({id: id}, {projection: {_id: 0}})
         if (!post) {
             return null
         }

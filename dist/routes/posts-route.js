@@ -26,7 +26,7 @@ exports.postsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, func
     return yield queryPostRepository_1.QueryPostRepository.getPosts(sortData);
 }));
 exports.postsRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const post = yield posts_repository_1.PostRepository.getPostById(req.params.id);
+    const post = yield queryPostRepository_1.QueryPostRepository.getPostById(req.params.id);
     if (!post) {
         res.send(404);
         return;
