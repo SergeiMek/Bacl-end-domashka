@@ -60,6 +60,10 @@ blogsRoute.post('/:id/posts', authMiddleware, createdPostInBlogValidation(), asy
     const blogId = req.params.id
 
     const blog = await QueryBlogRepository.getBlogById(blogId)
+    if(!blogId){
+        res.sendStatus(404)
+        return
+    }
 
     if(!blog){
         res.sendStatus(404)
