@@ -10,7 +10,7 @@ export class QueryPostRepository {
         const pageNumber = sortData.pageNumber ?? 1
         const pageSize = sortData.pageSize ?? 10
         const sortBy = sortData.sortBy ?? 'createdAt'
-        const sortDirection = sortData.sortDirection ?? 'desc'
+        const sortDirection = sortData.sortDirection ?? 'asc'
 
 
         const posts: Array<postsType> = await postsCollection
