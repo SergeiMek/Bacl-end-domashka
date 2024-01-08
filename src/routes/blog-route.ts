@@ -129,8 +129,9 @@ blogsRoute.post('/:id/posts', authMiddleware, async (req: RequestWithBodyAndPara
 
     if (!post) {
         res.send(404)
+        return
     }
-    res.send(post)
+    res.status(201).send(post)
 })
 
 blogsRoute.delete('/:id', authMiddleware, async (req: RequestWithParams<BlogsParams>, res: Response) => {
