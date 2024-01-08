@@ -15,8 +15,8 @@ export class QueryPostRepository {
 
         const posts: Array<postsType> = await postsCollection
             .find()
-            .skip((+pageNumber - 1) * +pageSize)
             .sort(sortBy, sortDirection)
+            .skip((+pageNumber - 1) * +pageSize)
             .limit(+pageSize)
             .toArray()
 

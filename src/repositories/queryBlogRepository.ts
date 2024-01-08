@@ -28,7 +28,7 @@ export class QueryBlogRepository {
 
         const blogs: Array<blogsType> = await blogsCollection
             .find(filter)
-            .sort(sortBy, sortDirection)
+            .sort({sortBy: sortDirection})
             .skip((+pageNumber - 1) * +pageSize)
             .limit(+pageSize)
             .toArray()
