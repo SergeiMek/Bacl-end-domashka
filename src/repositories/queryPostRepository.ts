@@ -10,13 +10,13 @@ export class QueryPostRepository {
         const pageNumber = sortData.pageNumber ?? 1
         const pageSize = sortData.pageSize ?? 10
         const sortBy = sortData.sortBy ?? 'createdAt'
-        const sortDirection = sortData.sortDirection ?? 'asc'
+        const sortDirection = sortData.sortDirection ?? 'desc'
 
 
         const posts: Array<postsType> = await postsCollection
             .find()
-            .sort(sortBy, sortDirection)
             .skip((+pageNumber - 1) * +pageSize)
+            .sort(sortBy, sortDirection)
             .limit(+pageSize)
             .toArray()
 
