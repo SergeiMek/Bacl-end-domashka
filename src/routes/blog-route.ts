@@ -1,4 +1,4 @@
-import {Request, Response, Router} from "express";
+import {Response, Router} from "express";
 import {BlogRepository} from "../repositories/blog-repository";
 import {
     RequestTypeWithQuery,
@@ -12,11 +12,7 @@ import {blogPostValidation, createdPostInBlogValidation} from "../validators/blo
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {BlogService} from "../domain/blog-service";
 import {QueryBlogRepository} from "../repositories/queryBlogRepository";
-import {postBodyType} from "../types/post/output";
-import {PostRepository} from "../repositories/posts-repository";
 import {QueryPostRepository} from "../repositories/queryPostRepository";
-
-
 
 
 export const blogsRoute = Router({})
@@ -65,7 +61,7 @@ blogsRoute.get('/:id/posts', async (req: RequestWithParamsAndQuery<BlogsParams, 
     return res.status(200).send(posts)
 })
 
-blogsRoute.post('/:id/posts', authMiddleware, createdPostInBlogValidation(), async (req: RequestWithBodyAndParams<{ id: string }, postDataType>, res: Response) => {
+/*blogsRoute.post('/:id/posts', authMiddleware, createdPostInBlogValidation(), async (req: RequestWithBodyAndParams<{ id: string }, postDataType>, res: Response) => {
     const title = req.body.title
     const shortDescription = req.body.shortDescription
     const content = req.body.content
@@ -89,7 +85,7 @@ blogsRoute.post('/:id/posts', authMiddleware, createdPostInBlogValidation(), asy
     }
     res.status(201).send(post)
 
-})
+})*/
 
 blogsRoute.post('/', authMiddleware, blogPostValidation(), async (req: RequestWithBody<BlogsBodyType>, res: Response) => {
 
@@ -99,7 +95,6 @@ blogsRoute.post('/', authMiddleware, blogPostValidation(), async (req: RequestWi
         websiteUrl: req.body.websiteUrl
     }
 
-    ///const result = await BlogRepository.createBlog(newProduct)
     const blog = await BlogService.createBlog(newBlogData)
 
     return res.status(201).send(blog)
@@ -114,7 +109,8 @@ blogsRoute.put('/:id', authMiddleware, blogPostValidation(), async (req: Request
         websiteUrl: req.body.websiteUrl
     }
 
-    let isUpdated = await BlogRepository.updateBlog(req.params.id, updateParams)
+    //let isUpdated = await BlogRepository.updateBlog(req.params.id, updateParams)
+    let isUpdated = await BlogService.updateBlog(req.params.id, updateParams)
 
     if (isUpdated) {
         res.send(204)

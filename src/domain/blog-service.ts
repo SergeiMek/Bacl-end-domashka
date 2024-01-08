@@ -1,7 +1,7 @@
-import {newBlogDataType, postDataType} from "../types/blog/input";
+import {BlogsBodyType, newBlogDataType, postDataType} from "../types/blog/input";
 import {BlogRepository} from "../repositories/blog-repository";
-import {PostRepository} from "../repositories/posts-repository";
 import {QueryBlogRepository} from "../repositories/queryBlogRepository";
+import {QueryPostRepository} from "../repositories/queryPostRepository";
 
 export class BlogService {
     static async createBlog(newBlogData: newBlogDataType) {
@@ -13,7 +13,7 @@ export class BlogService {
             createdAt: new Date().toISOString(),
             isMembership: false
         }
-          await BlogRepository.createBlog(newBlog)
+        await BlogRepository.createBlog(newBlog)
         return await QueryBlogRepository.getBlogById(newBlog.id)
 
     }
@@ -25,17 +25,18 @@ export class BlogService {
             blogId: blogId
         }
 
-        const blog = await BlogRepository.getBlogById(blogId)
+        const blog = await QueryBlogRepository.getBlogById(blogId)
 
         if (!blog) {
             return null
         }
-        const id = await PostRepository.createPost(post)/// запрос в бд
-        //const post = await queryPostRepository.createPostToBlog(id) ///получает правильные посты
+        const createdPostId = await BlogRepository.createPostToBlog(blogId, post)
+        return  await QueryPostRepository.getPostById(createdPostId)
 
-       /* if(!post){
-            return null
-        }
-        return post*/
+    }
+    static async updateBlog(id:string,updateParams:BlogsBodyType){
+        return await BlogRepository.updateBlog(id, updateParams)
     }
 }
+
+
