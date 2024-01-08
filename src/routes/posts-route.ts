@@ -8,6 +8,7 @@ import {postValidation} from "../validators/post-validator";
 import {SortDataType} from "../types/blog/input";
 import {QueryBlogRepository} from "../repositories/queryBlogRepository";
 import {QueryPostRepository} from "../repositories/queryPostRepository";
+import {PostService} from "../domain/post-service";
 
 
 export const postsRoute = Router({})
@@ -19,7 +20,7 @@ postsRoute.get('/', async (req: RequestTypeWithQuery<sorPostData>, res: Response
         sortBy: req.query.sortBy,
         sortDirection: req.query.sortDirection
     }
-    const foundProducts =   await QueryPostRepository.getPosts(sortData)
+    const foundProducts = await QueryPostRepository.getPosts(sortData)
 
     return res.status(200).send(foundProducts)
 })
@@ -41,7 +42,13 @@ postsRoute.post('/', authMiddleware, postValidation(), async (req: RequestWithBo
         blogId: req.body.blogId
     }
 
-    return res.status(201).send(await PostRepository.createPost(newPost))
+    //return res.status(201).send(await PostRepository.createPost(newPost))
+    const createdPost = await PostService.createPost(newPost)
+    if (!createdPost) {
+        res.send(400)
+        return
+    }
+    return res.status(201).send(createdPost)
 })
 
 postsRoute.put('/:id', authMiddleware, postValidation(), async (req: RequestWithBodyAndParams<paramsPost, postBodyType>, res: Response) => {
@@ -53,7 +60,8 @@ postsRoute.put('/:id', authMiddleware, postValidation(), async (req: RequestWith
         blogId: req.body.blogId
     }
 
-    let isUpdated = await PostRepository.updatePost(req.params.id, newPost)
+    //let isUpdated = await PostRepository.updatePost(req.params.id, newPost)
+    let isUpdated = await PostService.updatePost(req.params.id, newPost)
 
     if (isUpdated) {
         res.send(204)

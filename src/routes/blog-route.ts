@@ -96,6 +96,10 @@ blogsRoute.post('/', authMiddleware, blogPostValidation(), async (req: RequestWi
     }
 
     const blog = await BlogService.createBlog(newBlogData)
+    if(!blog){
+        res.status(400)
+        return
+    }
 
     return res.status(201).send(blog)
 })
