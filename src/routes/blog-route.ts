@@ -140,4 +140,5 @@ blogsRoute.delete('/:id', authMiddleware, async (req: RequestWithParams<BlogsPar
         return res.send(204)
     }
     return res.send(404)
+
 })
