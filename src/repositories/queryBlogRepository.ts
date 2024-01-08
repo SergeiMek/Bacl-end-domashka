@@ -5,9 +5,8 @@ import {postOutputModel, postsType} from "../types/post/output";
 import {QueryPostRepository} from "./queryPostRepository";
 
 
-
 export class QueryBlogRepository {
-    static async getBlogs(sortData: SortDataType):Promise<blogOutputModel> {
+    static async getBlogs(sortData: SortDataType): Promise<blogOutputModel> {
 
         const sortDirection = sortData.sortDirection ?? 'desc'
         const sortBy = sortData.sortBy ?? 'createdAt'
@@ -28,7 +27,7 @@ export class QueryBlogRepository {
 
         const blogs: Array<blogsType> = await blogsCollection
             .find(filter)
-            .sort({[sortBy]: sortDirection})
+            .sort({[sortBy]: sortDirection === 'asc' ? -1 : 1})
             .skip((+pageNumber - 1) * +pageSize)
             .limit(+pageSize)
             .toArray()
@@ -56,7 +55,7 @@ export class QueryBlogRepository {
         return blog
     }
 
-    static async getPostsByBlogId(blogId:string,sortData: BlogsQueryType):Promise<postOutputModel> {
+    static async getPostsByBlogId(blogId: string, sortData: BlogsQueryType): Promise<postOutputModel> {
 
         const sortDirection = sortData.sortDirection ?? 'desc'
         const sortBy = sortData.sortBy ?? 'createdAt'
@@ -64,17 +63,15 @@ export class QueryBlogRepository {
         const pageNumber = sortData.pageNumber ?? 1
 
 
-
-
         const posts: Array<postsType> = await postsCollection
-            .find({blogId:blogId})
+            .find({blogId: blogId})
             .sort(sortBy, sortDirection)
             .skip((+pageNumber - 1) * +pageSize)
             .limit(+pageSize)
             .toArray()
 
 
-        const totalCount = await postsCollection.countDocuments({blogId:blogId})
+        const totalCount = await postsCollection.countDocuments({blogId: blogId})
 
         const pageCount = Math.ceil(totalCount / +pageSize)
 
@@ -88,9 +85,9 @@ export class QueryBlogRepository {
         }
     }
 
-    static _mapDbBlogToBlogOutputModel(DBBlog: Array<blogsType>):Array<blogsType> {
+    static _mapDbBlogToBlogOutputModel(DBBlog: Array<blogsType>): Array<blogsType> {
 
-      return   DBBlog.map((b) => {
+        return DBBlog.map((b) => {
             return {
                 id: b.id,
                 name: b.name,
