@@ -120,7 +120,7 @@ blogsRoute.put('/:id', authMiddleware, blogPostValidation(), async (req: Request
 
 })
 
-blogsRoute.post('/:id/posts', authMiddleware, async (req: RequestWithBodyAndParams<BlogsParams, postDataType>, res: Response) => {
+blogsRoute.post('/:id/posts', authMiddleware,createdPostInBlogValidation(), async (req: RequestWithBodyAndParams<BlogsParams, postDataType>, res: Response) => {
     const id = req.params.id
     const {title, shortDescription, content} = req.body
 
