@@ -39,7 +39,7 @@ export class QueryUsersRepository {
                 .toArray()
 
 
-        const totalCount = await postsCollection.countDocuments()
+        const totalCount = await usersCollection.countDocuments()
 
         const pageCount = Math.ceil(totalCount / +pageSize)
 
