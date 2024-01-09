@@ -3,7 +3,7 @@ import {videoRoute} from "./routes/video-route";
 import {blogsRoute} from "./routes/blog-route";
 import {postsRoute} from "./routes/posts-route";
 import bodyParser from 'body-parser'
-import {blogsCollection, postsCollection, videosCollection} from "./db/db";
+import {blogsCollection, postsCollection, usersCollection, videosCollection} from "./db/db";
 import {usersRoute} from "./routes/users-route";
 
 
@@ -15,6 +15,7 @@ app.delete('/testing/all-data', async (req: Request, res: Response) => {
     const res1 = await videosCollection.deleteMany({})
     const res2 = await blogsCollection.deleteMany({})
     const res3 = await postsCollection.deleteMany({})
+    const res4 = await usersCollection.deleteMany({})
 
     res.sendStatus(204)
 })
@@ -25,7 +26,7 @@ app.use(parserMiddleware)*/
 app.use('/videos', videoRoute)
 app.use('/blogs', blogsRoute)
 app.use('/posts', postsRoute)
-app.use('/users',usersRoute)
+app.use('/users', usersRoute)
 
 
 
