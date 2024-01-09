@@ -25,7 +25,7 @@ export class QueryUsersRepository {
         if (searchEmailTerm) {
             filter = {
                 email: {
-                    $regex: searchLoginTerm,
+                    $regex:  searchEmailTerm,
                     $options: 'i'
                 }
             }
