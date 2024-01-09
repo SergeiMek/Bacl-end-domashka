@@ -15,6 +15,7 @@ const posts_repository_1 = require("../repositories/posts-repository");
 const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
 const post_validator_1 = require("../validators/post-validator");
 const queryPostRepository_1 = require("../repositories/queryPostRepository");
+const post_service_1 = require("../domain/post-service");
 exports.postsRoute = (0, express_1.Router)({});
 exports.postsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const sortData = {
@@ -41,7 +42,13 @@ exports.postsRoute.post('/', auth_middleware_1.authMiddleware, (0, post_validato
         content: req.body.content,
         blogId: req.body.blogId
     };
-    return res.status(201).send(yield posts_repository_1.PostRepository.createPost(newPost));
+    //return res.status(201).send(await PostRepository.createPost(newPost))
+    const createdPost = yield post_service_1.PostService.createPost(newPost);
+    if (!createdPost) {
+        res.send(400);
+        return;
+    }
+    return res.status(201).send(createdPost);
 }));
 exports.postsRoute.put('/:id', auth_middleware_1.authMiddleware, (0, post_validator_1.postValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newPost = {
@@ -50,7 +57,8 @@ exports.postsRoute.put('/:id', auth_middleware_1.authMiddleware, (0, post_valida
         content: req.body.content,
         blogId: req.body.blogId
     };
-    let isUpdated = yield posts_repository_1.PostRepository.updatePost(req.params.id, newPost);
+    //let isUpdated = await PostRepository.updatePost(req.params.id, newPost)
+    let isUpdated = yield post_service_1.PostService.updatePost(req.params.id, newPost);
     if (isUpdated) {
         res.send(204);
     }

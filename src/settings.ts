@@ -4,6 +4,7 @@ import {blogsRoute} from "./routes/blog-route";
 import {postsRoute} from "./routes/posts-route";
 import bodyParser from 'body-parser'
 import {blogsCollection, postsCollection, videosCollection} from "./db/db";
+import {usersRoute} from "./routes/users-route";
 
 
 export const app = express()
@@ -24,6 +25,7 @@ app.use(parserMiddleware)*/
 app.use('/videos', videoRoute)
 app.use('/blogs', blogsRoute)
 app.use('/posts', postsRoute)
+app.use('/users',usersRoute)
 
 
 
