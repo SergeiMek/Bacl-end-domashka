@@ -32,7 +32,7 @@ export class QueryUsersRepository {
         }
         if (searchEmailTerm && searchLoginTerm) {
             filter = {$or:[{email: {
-                $regex: searchLoginTerm,
+                $regex: searchEmailTerm,
                     $options: 'i'
             },
             login: {
