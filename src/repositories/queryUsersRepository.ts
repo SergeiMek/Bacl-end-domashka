@@ -17,7 +17,7 @@ export class QueryUsersRepository {
         if (searchLoginTerm) {
             filter = {
                 login: {
-                    $regex: searchLoginTerm,
+                    $search: searchLoginTerm,
                     $options: 'i'
                 }
             }
@@ -25,7 +25,7 @@ export class QueryUsersRepository {
         if (searchEmailTerm) {
             filter = {
                 email: {
-                    $regex: searchLoginTerm,
+                    $search: searchLoginTerm,
                     $options: 'i'
                 }
             }
@@ -33,11 +33,11 @@ export class QueryUsersRepository {
         if (searchEmailTerm && searchLoginTerm) {
             filter = {
                 email: {
-                    $regex: searchLoginTerm,
+                    $search: searchLoginTerm,
                     $options: 'i'
                 },
                 login: {
-                    $regex: searchLoginTerm,
+                    $search: searchLoginTerm,
                     $options: 'i'
                 }
             }
