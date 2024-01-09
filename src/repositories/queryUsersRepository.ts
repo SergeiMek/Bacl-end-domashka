@@ -34,8 +34,8 @@ export class QueryUsersRepository {
             filter = {$or:[{email: {
                 $regex: searchEmailTerm,
                     $options: 'i'
-            },
-            login: {
+            }},
+                    {login: {
                 $regex: searchLoginTerm,
                     $options: 'i'
             }}]
