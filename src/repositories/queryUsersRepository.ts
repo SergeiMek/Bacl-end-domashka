@@ -1,4 +1,4 @@
-import {postsCollection, usersCollection} from "../db/db";
+import {usersCollection} from "../db/db";
 import {userOutputModel, userQueryType, userType} from "../types/users/output";
 import {sortUserData} from "../types/users/input";
 
@@ -23,6 +23,18 @@ export class QueryUsersRepository {
             }
         }
         if (searchEmailTerm) {
+            filter = {
+                email: {
+                    $regex: searchLoginTerm,
+                    $options: 'i'
+                },
+                login: {
+                    $regex: searchLoginTerm,
+                    $options: 'i'
+                }
+            }
+        }
+        if (searchEmailTerm && searchLoginTerm) {
             filter = {
                 email: {
                     $regex: searchLoginTerm,
