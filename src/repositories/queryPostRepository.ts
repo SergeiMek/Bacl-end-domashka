@@ -3,7 +3,6 @@ import {postsCollection} from "../db/db";
 import {sorPostData} from "../types/post/input";
 
 
-
 export class QueryPostRepository {
     static async getPosts(sortData: sorPostData): Promise<postOutputModel> {
 
@@ -15,7 +14,7 @@ export class QueryPostRepository {
 
         const posts: Array<postsType> = await postsCollection
             .find()
-            .sort(sortBy, sortDirection)
+            .sort({[sortBy]: sortDirection === "asc" ? 1 : "desc",createdAt:1})
             .skip((+pageNumber - 1) * +pageSize)
             .limit(+pageSize)
             .toArray()
