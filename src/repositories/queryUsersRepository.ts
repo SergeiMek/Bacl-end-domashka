@@ -12,9 +12,27 @@ export class QueryUsersRepository {
         const searchLoginTerm = sortData.searchLoginTerm ?? null
         const searchEmailTerm = sortData.searchEmailTerm ?? null
 
+        let filter = {}
+
+        if (searchLoginTerm) {
+            filter = {
+                login: {
+                    $regex: searchLoginTerm,
+                    $options: 'i'
+                }
+            }
+        }
+        if (searchEmailTerm) {
+            filter = {
+                email: {
+                    $regex: searchLoginTerm,
+                    $options: 'i'
+                }
+            }
+        }
 
             const user: Array<userType> = await usersCollection
-                .find(searchLoginTerm?{login: searchLoginTerm}:searchEmailTerm?{email:searchEmailTerm}:{})
+                .find(filter)
                 .sort({[sortBy]: sortDirection === "asc" ? 1 : "desc", createdAt: sortDirection === "asc" ? 1 : "desc"})
                 .skip((+pageNumber - 1) * +pageSize)
                 .limit(+pageSize)
