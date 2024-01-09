@@ -27,16 +27,16 @@ export class QueryUsersRepository {
                 email: {
                     $regex: searchLoginTerm,
                     $options: 'i'
-                },
-                login: {
-                    $regex: searchLoginTerm,
-                    $options: 'i'
                 }
             }
         }
         if (searchEmailTerm && searchLoginTerm) {
             filter = {
                 email: {
+                    $regex: searchLoginTerm,
+                    $options: 'i'
+                },
+                login: {
                     $regex: searchLoginTerm,
                     $options: 'i'
                 }
