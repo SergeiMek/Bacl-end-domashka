@@ -17,7 +17,7 @@ export class QueryUsersRepository {
         if (searchLoginTerm) {
             filter = {
                 login: {
-                    $search: searchLoginTerm,
+                    $regex: searchLoginTerm,
                     $options: 'i'
                 }
             }
@@ -25,23 +25,23 @@ export class QueryUsersRepository {
         if (searchEmailTerm) {
             filter = {
                 email: {
-                    $search: searchLoginTerm,
+                    $regex: searchLoginTerm,
                     $options: 'i'
                 }
             }
         }
         if (searchEmailTerm && searchLoginTerm) {
-            filter = {
-                email: {
-                    $search: searchLoginTerm,
+            filter = {$or:[{email: {
+                $regex: searchLoginTerm,
                     $options: 'i'
-                },
-                login: {
-                    $search: searchLoginTerm,
+            },
+            login: {
+                $regex: searchLoginTerm,
                     $options: 'i'
-                }
-            }
-        }
+            }}]
+
+
+        }}
 
             const user: Array<userType> = await usersCollection
                 .find(filter)
