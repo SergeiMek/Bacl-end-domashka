@@ -65,7 +65,7 @@ export class QueryUsersRepository {
     }
 
     static async getUserById(id: string): Promise<userQueryType | null> {
-        const user = await usersCollection.findOne({id: id}, {projection: {_id: 0, password: 0}})
+        const user = await usersCollection.findOne({id: id}, {projection: {_id: 0, passwordSalt: 0,passwordHash:0}})
         if (!user) {
             return null
         }
