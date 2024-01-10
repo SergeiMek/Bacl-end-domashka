@@ -19,6 +19,7 @@ const blog_route_1 = require("./routes/blog-route");
 const posts_route_1 = require("./routes/posts-route");
 const db_1 = require("./db/db");
 const users_route_1 = require("./routes/users-route");
+const auth_route_1 = require("./routes/auth-route");
 exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json());
 exports.app.delete('/testing/all-data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,3 +35,4 @@ exports.app.use('/videos', video_route_1.videoRoute);
 exports.app.use('/blogs', blog_route_1.blogsRoute);
 exports.app.use('/posts', posts_route_1.postsRoute);
 exports.app.use('/users', users_route_1.usersRoute);
+exports.app.use('/auth', auth_route_1.authRoute);

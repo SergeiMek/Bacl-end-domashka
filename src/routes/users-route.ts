@@ -5,7 +5,6 @@ import {userBodyType} from "../types/users/output";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {userValidation} from "../validators/user-validator";
 import {UsersRepository} from "../repositories/users-repository";
-import {QueryPostRepository} from "../repositories/queryPostRepository";
 import {sortUserData} from "../types/users/input";
 import {QueryUsersRepository} from "../repositories/queryUsersRepository";
 
