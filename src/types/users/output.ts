@@ -11,7 +11,8 @@ export type userType = {
     login: string
     email: string
     createdAt: string
-    password: string
+    passwordSalt:string
+    passwordHash:string
 }
 
 export type userQueryType ={
