@@ -61,32 +61,6 @@ blogsRoute.get('/:id/posts', async (req: RequestWithParamsAndQuery<BlogsParams, 
     return res.status(200).send(posts)
 })
 
-/*blogsRoute.post('/:id/posts', authMiddleware, createdPostInBlogValidation(), async (req: RequestWithBodyAndParams<{ id: string }, postDataType>, res: Response) => {
-    const title = req.body.title
-    const shortDescription = req.body.shortDescription
-    const content = req.body.content
-
-    const blogId = req.params.id
-
-    const blog = await QueryBlogRepository.getBlogById(blogId)
-
-
-    if (!blog) {
-        res.sendStatus(404)
-        return
-    }
-
-    const createdPostId = await BlogRepository.createPostToBlog(blogId, {title, shortDescription, content})
-
-    const post = await QueryPostRepository.getPostById(createdPostId)
-    if (!post) {
-        res.sendStatus(404)
-        return
-    }
-    res.status(201).send(post)
-
-})*/
-
 blogsRoute.post('/', authMiddleware, blogPostValidation(), async (req: RequestWithBody<BlogsBodyType>, res: Response) => {
 
     const newBlogData = {

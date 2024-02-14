@@ -21,6 +21,11 @@ export type userQueryType ={
     email:string
     createdAt:string
 }
+export type meQueryType ={
+    userId:string
+    login:string
+    email:string
+}
 
 export type userOutputModel = {
     pagesCount: number,

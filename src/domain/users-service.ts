@@ -30,7 +30,7 @@ export class UsersService {
         if (user.passwordHash !== passwordHash) {
             return false
         }
-        return true
+        return user
 
     }
 

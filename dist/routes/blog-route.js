@@ -52,31 +52,6 @@ exports.blogsRoute.get('/:id/posts', (req, res) => __awaiter(void 0, void 0, voi
     const posts = yield queryBlogRepository_1.QueryBlogRepository.getPostsByBlogId(id, sortData);
     return res.status(200).send(posts);
 }));
-/*blogsRoute.post('/:id/posts', authMiddleware, createdPostInBlogValidation(), async (req: RequestWithBodyAndParams<{ id: string }, postDataType>, res: Response) => {
-    const title = req.body.title
-    const shortDescription = req.body.shortDescription
-    const content = req.body.content
-
-    const blogId = req.params.id
-
-    const blog = await QueryBlogRepository.getBlogById(blogId)
-
-
-    if (!blog) {
-        res.sendStatus(404)
-        return
-    }
-
-    const createdPostId = await BlogRepository.createPostToBlog(blogId, {title, shortDescription, content})
-
-    const post = await QueryPostRepository.getPostById(createdPostId)
-    if (!post) {
-        res.sendStatus(404)
-        return
-    }
-    res.status(201).send(post)
-
-})*/
 exports.blogsRoute.post('/', auth_middleware_1.authMiddleware, (0, blogs_validator_1.blogPostValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newBlogData = {
         name: req.body.name,

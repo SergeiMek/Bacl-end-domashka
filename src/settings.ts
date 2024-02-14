@@ -5,6 +5,8 @@ import {postsRoute} from "./routes/posts-route";
 import {blogsCollection, postsCollection, usersCollection, videosCollection} from "./db/db";
 import {usersRoute} from "./routes/users-route";
 import {authRoute} from "./routes/auth-route";
+import {commentsRoute} from "./routes/comments-route";
+
 
 
 export const app = express()
@@ -28,6 +30,7 @@ app.use('/blogs', blogsRoute)
 app.use('/posts', postsRoute)
 app.use('/users', usersRoute)
 app.use('/auth', authRoute)
+app.use('/comments', commentsRoute)
 
 
 

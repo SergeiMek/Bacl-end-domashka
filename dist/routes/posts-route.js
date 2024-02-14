@@ -16,6 +16,10 @@ const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
 const post_validator_1 = require("../validators/post-validator");
 const queryPostRepository_1 = require("../repositories/queryPostRepository");
 const post_service_1 = require("../domain/post-service");
+const comments_validator_1 = require("../validators/comments-validator");
+const comments_service_1 = require("../domain/comments-service");
+const access_token_guard_1 = require("../middlewares/auth/access.token.guard");
+const queryCommentsRepository_1 = require("../repositories/queryCommentsRepository");
 exports.postsRoute = (0, express_1.Router)({});
 exports.postsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const sortData = {
@@ -25,6 +29,19 @@ exports.postsRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, func
         sortDirection: req.query.sortDirection
     };
     const foundProducts = yield queryPostRepository_1.QueryPostRepository.getPosts(sortData);
+    return res.status(200).send(foundProducts);
+}));
+exports.postsRoute.get('/:id/comments', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const post = yield queryPostRepository_1.QueryPostRepository.getPostById(req.params.id);
+    if (!post)
+        return res.sendStatus(404);
+    const sortData = {
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection
+    };
+    const foundProducts = yield queryCommentsRepository_1.QueryCommentsRepository.getComments(sortData, req.params.id);
     return res.status(200).send(foundProducts);
 }));
 exports.postsRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -49,6 +66,26 @@ exports.postsRoute.post('/', auth_middleware_1.authMiddleware, (0, post_validato
         return;
     }
     return res.status(201).send(createdPost);
+}));
+exports.postsRoute.post('/:id/comments', access_token_guard_1.accessTokenGuard, (0, comments_validator_1.commentValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // @ts-ignore
+    const userId = req.user.id;
+    const content = req.body.content;
+    const postId = req.params.id;
+    if (!userId)
+        res.sendStatus(401);
+    const comment = yield comments_service_1.CommentsService.sendComment(content, userId, postId);
+    if (!comment) {
+        res.send(400);
+        return;
+    }
+    /*//return res.status(201).send(await PostRepository.createPost(newPost))
+    const createdComment = await PostService.createPost(newPost)
+    if (!createdComment) {
+        res.send(400)
+        return
+    }*/
+    return res.status(201).send(comment);
 }));
 exports.postsRoute.put('/:id', auth_middleware_1.authMiddleware, (0, post_validator_1.postValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newPost = {

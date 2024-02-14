@@ -1,6 +1,12 @@
 import {Request, Response, Router} from "express";
 import {PostRepository} from "../repositories/posts-repository";
-import {RequestTypeWithQuery, RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../types/common";
+import {
+    RequestTypeWithQuery,
+    RequestWithBody,
+    RequestWithBodyAndParams,
+    RequestWithParams,
+    RequestWithParamsAndQuery
+} from "../types/common";
 import {paramsPost, sorPostData} from "../types/post/input";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {postBodyType, postsType} from "../types/post/output";
@@ -9,6 +15,11 @@ import {SortDataType} from "../types/blog/input";
 import {QueryBlogRepository} from "../repositories/queryBlogRepository";
 import {QueryPostRepository} from "../repositories/queryPostRepository";
 import {PostService} from "../domain/post-service";
+import {commentValidation, contendValidation} from "../validators/comments-validator";
+import {CommentsService} from "../domain/comments-service";
+import {accessTokenGuard} from "../middlewares/auth/access.token.guard";
+import {sorCommentsData} from "../types/comments/input";
+import {QueryCommentsRepository} from "../repositories/queryCommentsRepository";
 
 
 export const postsRoute = Router({})
@@ -21,6 +32,23 @@ postsRoute.get('/', async (req: RequestTypeWithQuery<sorPostData>, res: Response
         sortDirection: req.query.sortDirection
     }
     const foundProducts = await QueryPostRepository.getPosts(sortData)
+
+    return res.status(200).send(foundProducts)
+})
+
+postsRoute.get('/:id/comments', async (req: RequestWithParamsAndQuery<{
+    id: string
+}, sorCommentsData>, res: Response): Promise<any> => {
+    const post = await QueryPostRepository.getPostById(req.params.id)
+    if (!post)return  res.sendStatus(404)
+    const sortData = {
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection
+    }
+
+    const foundProducts = await QueryCommentsRepository.getComments(sortData, req.params.id)
 
     return res.status(200).send(foundProducts)
 })
@@ -49,6 +77,31 @@ postsRoute.post('/', authMiddleware, postValidation(), async (req: RequestWithBo
         return
     }
     return res.status(201).send(createdPost)
+})
+
+postsRoute.post('/:id/comments', accessTokenGuard, commentValidation(), async (req: RequestWithBodyAndParams<{
+    id: string
+}, { content: string }>, res: Response) => {
+
+    // @ts-ignore
+    const userId = req.user!.id as string
+    const content = req.body.content
+    const postId = req.params.id
+    if (!userId) res.sendStatus(401)
+
+    const comment = await CommentsService.sendComment(content, userId, postId)
+
+    if (!comment) {
+        res.send(400)
+        return
+    }
+    /*//return res.status(201).send(await PostRepository.createPost(newPost))
+    const createdComment = await PostService.createPost(newPost)
+    if (!createdComment) {
+        res.send(400)
+        return
+    }*/
+    return res.status(201).send(comment)
 })
 
 postsRoute.put('/:id', authMiddleware, postValidation(), async (req: RequestWithBodyAndParams<paramsPost, postBodyType>, res: Response) => {

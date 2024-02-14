@@ -5,7 +5,6 @@ import {QueryBlogRepository} from "../repositories/queryBlogRepository";
 
 const blogIdValidation = body('blogId').isString().trim().custom(async (value) => {
     const blog =await QueryBlogRepository.getBlogById(value)
-
     if (!blog) {
         throw new Error("Incorrect blogId")
     }
