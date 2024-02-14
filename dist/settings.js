@@ -28,6 +28,7 @@ exports.app.delete('/testing/all-data', (req, res) => __awaiter(void 0, void 0, 
     const res2 = yield db_1.blogsCollection.deleteMany({});
     const res3 = yield db_1.postsCollection.deleteMany({});
     const res4 = yield db_1.usersCollection.deleteMany({});
+    const res5 = yield db_1.commentsCollection.deleteMany({});
     res.sendStatus(204);
 }));
 /*const parserMiddleware = bodyParser({})
