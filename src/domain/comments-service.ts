@@ -67,7 +67,7 @@ export class CommentsService {
             }
         }
 
-        if (userId != comment.commentatorInfo.userId) {
+        if (userId !== comment.commentatorInfo.userId) {
             return {
                 code: ResultCode.Forbidden,
                 errorMessage: "Incorrect user"
