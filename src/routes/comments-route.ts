@@ -20,10 +20,10 @@ commentsRoute.get('/:id', async (req: RequestWithParams<{ id: string }>, res: Re
 
     const foundComment = await QueryCommentsRepository.getCommentById(req.params.id)
     if (!foundComment) {
-        res.sendStatus(404)
+       return  res.sendStatus(404)
     }
 
-    res.send(foundComment)
+   return  res.status(200).send(foundComment)
 })
 
 commentsRoute.put('/:commentId', accessTokenGuard, updateCommentValidation(), async (req: RequestWithBodyAndParams<{commentId:string}, {content:string}>, res: Response) => {

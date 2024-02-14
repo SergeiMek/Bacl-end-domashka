@@ -40,7 +40,7 @@ postsRoute.get('/:id/comments', async (req: RequestWithParamsAndQuery<{
     id: string
 }, sorCommentsData>, res: Response): Promise<any> => {
     const post = await QueryPostRepository.getPostById(req.params.id)
-    if (!post)return  res.sendStatus(404)
+    if (!post)  return res.sendStatus(404)
     const sortData = {
         pageNumber: req.query.pageNumber,
         pageSize: req.query.pageSize,
