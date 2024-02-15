@@ -89,15 +89,15 @@ postsRoute.post('/:id/comments', accessTokenGuard, commentValidation(), async (r
     const postId = req.params.id
     if (!userId) return res.sendStatus(401)
     if (!postId) {
-       return  res.send(404)
+       return  res.sendStatus(404)
 
     }
 
     const comment = await CommentsService.sendComment(content, userId, postId)
 
     if (!comment) {
-        res.send(404)
-        return
+       return  res.sendStatus(404)
+
     }
     /*//return res.status(201).send(await PostRepository.createPost(newPost))
     const createdComment = await PostService.createPost(newPost)
