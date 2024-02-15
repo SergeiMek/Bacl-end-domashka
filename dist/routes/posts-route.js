@@ -74,8 +74,10 @@ exports.postsRoute.post('/:id/comments', access_token_guard_1.accessTokenGuard, 
     const postId = req.params.id;
     if (!userId)
         return res.sendStatus(401);
-    if (!postId)
-        return res.sendStatus(404);
+    if (!postId) {
+        res.send(404);
+        return;
+    }
     const comment = yield comments_service_1.CommentsService.sendComment(content, userId, postId);
     if (!comment) {
         res.send(400);

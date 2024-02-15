@@ -40,7 +40,7 @@ postsRoute.get('/:id/comments', async (req: RequestWithParamsAndQuery<{
     id: string
 }, sorCommentsData>, res: Response): Promise<any> => {
     const post = await QueryPostRepository.getPostById(req.params.id)
-    if (!post)  return res.sendStatus(404)
+    if (!post) return res.sendStatus(404)
     const sortData = {
         pageNumber: req.query.pageNumber,
         pageSize: req.query.pageSize,
@@ -88,9 +88,9 @@ postsRoute.post('/:id/comments', accessTokenGuard, commentValidation(), async (r
     const content = req.body.content
     const postId = req.params.id
     if (!userId) return res.sendStatus(401)
-    if (!postId){
-         res.sendStatus(404)
-    return
+    if (!postId) {
+        res.send(404)
+        return
     }
 
     const comment = await CommentsService.sendComment(content, userId, postId)
