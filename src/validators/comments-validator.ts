@@ -14,7 +14,7 @@ debugger
 
 
 export const contendValidation = body('content').isString().trim().isLength({min: 20, max: 300}).withMessage('Incorrect comment!')
-export const commentValidation = ()=>[incorrectPostIdValidation,contendValidation,inputModelValidation]
+export const commentValidation = ()=>[contendValidation,inputModelValidation]
 //export const commentValidation = ()=>[contendValidation,inputModelValidation]
 export const updateCommentValidation = ()=>[contendValidation,inputModelValidation]
 

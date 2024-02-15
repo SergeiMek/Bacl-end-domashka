@@ -29,6 +29,9 @@ commentsRoute.get('/:id', async (req: RequestWithParams<{ id: string }>, res: Re
 commentsRoute.put('/:commentId', accessTokenGuard, updateCommentValidation(), async (req: RequestWithBodyAndParams<{commentId:string}, {content:string}>, res: Response) => {
     // @ts-ignore
     const userId = req.user!.id as string
+    if(!req.params.commentId){
+        return res.sendStatus(404)
+    }
     let result = await CommentsService.updateComment(req.params.commentId,req.body.content,userId)
 
     if (result.code === ResultCode.Forbidden) {

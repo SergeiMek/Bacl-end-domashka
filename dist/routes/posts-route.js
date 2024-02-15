@@ -79,7 +79,7 @@ exports.postsRoute.post('/:id/comments', access_token_guard_1.accessTokenGuard, 
     }
     const comment = yield comments_service_1.CommentsService.sendComment(content, userId, postId);
     if (!comment) {
-        return res.sendStatus(404);
+        return res.sendStatus(400);
     }
     /*//return res.status(201).send(await PostRepository.createPost(newPost))
     const createdComment = await PostService.createPost(newPost)
