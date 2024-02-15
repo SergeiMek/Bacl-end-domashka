@@ -5,7 +5,7 @@ import {inputModelValidation} from "../middlewares/inputModel/input-model-valida
 
 const incorrectPostIdValidation = param('id').isString().trim().custom(async (value) => {
     const post =await QueryPostRepository.getPostById(value)
-debugger
+
     if (!post) {
         throw new Error("Incorrect postId")
     }

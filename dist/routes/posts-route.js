@@ -77,6 +77,10 @@ exports.postsRoute.post('/:id/comments', access_token_guard_1.accessTokenGuard, 
     if (!postId) {
         return res.sendStatus(404);
     }
+    const post = yield queryPostRepository_1.QueryPostRepository.getPostById(postId);
+    if (!post) {
+        return res.sendStatus(404);
+    }
     const comment = yield comments_service_1.CommentsService.sendComment(content, userId, postId);
     if (!comment) {
         return res.sendStatus(400);

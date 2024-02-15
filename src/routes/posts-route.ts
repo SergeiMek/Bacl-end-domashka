@@ -92,7 +92,7 @@ postsRoute.post('/:id/comments', accessTokenGuard, commentValidation(), async (r
        return  res.sendStatus(404)
     }
     const post =await QueryPostRepository.getPostById(postId)
-    if(post){
+    if(!post){
         return res.sendStatus(404)
     }
     const comment = await CommentsService.sendComment(content, userId, postId)
